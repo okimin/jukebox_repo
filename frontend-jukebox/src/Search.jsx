@@ -32,9 +32,6 @@ class Search extends Component {
         }).catch(e=>console.log(e))
 
     }
-    setSearchValue=(e)=>{
-        
-    }
     getToken=()=>{
         SpotifyWebApi.setAccessToken(params)
 

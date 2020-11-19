@@ -10,6 +10,7 @@ import queue from "./Queue";
 import Async from 'react-async';
 import QueueComponent from "./QueueComponent";
 import App from './App'
+import axios from "axios";
 
 const queues = new queue()
 const app = new App()
@@ -21,17 +22,27 @@ class Room extends Component {
     constructor(props){
         super(props);
         
-        const results = this.MakeRoom()
+        // const results = this.MakeRoom()
+
+        
         this.state={
+
             nowPlaying:{
                 playName: 'not checked',
                 playImage:'',
                 playArtist:''
             },
+            user:{
+                name:"hi",
+                inRoom:true,
+                profileImage:"",
+                // email:""
+
+            },
             show: false,
             queueArray:[],
             songState:true,
-            roomCode:results
+            roomCode:""
         }
 
       
@@ -47,35 +58,43 @@ class Room extends Component {
     componentDidMount(){
         SpotifyWebApi.setAccessToken(params);
         this.getItemsPlaying();
+        this.getUser();
+        this.getRoom();
         setInterval(this.getItemsPlaying,3000);
+        setInterval(this.getUser,3000);
+
     }
 
-    MakeRoom =()=>{
-        var results =''
-        var char ='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-        var charactersLength = char.length;
-        for ( var i = 0; i < 6; i++ ) {
-           results += char.charAt(Math.floor(Math.random() * charactersLength));
-        }
-        // this.setState({roomCode: results})
-        // console.log(results)
-        return results
-      }
-      getRoom=()=>{
-        console.log(this.state.roomCode)
-        return this.state.roomCode;
-      }
+    getRoom = () => {
+        // var temp 
+        var index =app.getRoomIndex();
+        console.log(index)
+        
+        axios.get('https://jukeberry-api.herokuapp.com/api/home')
+        .then(res=>{
+            console.log(res)
+            var roomInfo = res.data
+           
+            this.setState({roomCode: roomInfo[index].roomID})
+            // temp=roomInfo[roomInfo.length-1].roomID
+        })
+        .catch(err=>console.error(err))
+        // console.log(temp)
+        // return temp
+    }
     getItemsPlaying = () =>{        
         SpotifyWebApi.getMyCurrentPlayingTrack()
-        .then((res) =>  
+        .then((res) => { 
             this.setState({
                 nowPlaying:{
-                  playName:res.item.name,
-                  playImage:res.item.album.images[0].url,
-                  playArtist:res.item.artists[0].name
+                    playName:res.item.name,
+                    playImage:res.item.album.images[0].url,
+                    playArtist:res.item.artists[0].name   
+                
                 }
             })
-        ).catch(e=>{console.log(e)})
+        })
+        .catch(e=>{console.log(e)})
 
        
     }
@@ -90,15 +109,15 @@ class Room extends Component {
             )
         }
     }
-    nextSong=()=>{
+    nextSong = () => {
         SpotifyWebApi.skipToNext()
         this.getItemsPlaying()
     }
-    previousSong=()=>{
+    previousSong = () => {
         SpotifyWebApi.skipToPrevious()
         this.getItemsPlaying()
     }
-    pauseSong=()=>{
+    pauseSong = () => {
         if(this.state.songState){
             SpotifyWebApi.pause()
             this.setState({songState:!this.state.songState})
@@ -108,12 +127,26 @@ class Room extends Component {
             this.setState({songState:!this.state.songState})
         }
     }
-    
+    getUser =() => {
+        SpotifyWebApi.getMe()
+        .then(res=>{
+            // console.log(res)
+            this.setState({
+                user:{
+                    name:res.display_name,
+                    profileImage:res.images[0].url,
+                    // email:res.item.artists[0].name               
+                }                
+            })
+            
+        })
+        .catch(err => {console.log(err)})
+    }    
     render(){
         return(
             <React.Fragment>
                 <div className="room-css">
-                    <Login/>        
+                    <Login/>                            
                     <p className='room-code'> {this.state.roomCode}</p>
                         <div className="currently-playing">
                         <div className="tracks"> 
@@ -131,6 +164,9 @@ class Room extends Component {
                         <button onClick={()=>this.SearchSongButton()}>Search Song</button>
                         <div className="container">
                             {this.showSearchResults()}
+                            <div className="users-tab">
+                                <img src={this.state.user.profileImage} className ="user-profile"/>
+                            </div>
                             <QueueComponent></QueueComponent>
                         </div>
                     </div>                 

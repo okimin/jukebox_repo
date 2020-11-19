@@ -53,7 +53,7 @@
 
 }
 .album{
-  width: 40%;
+  width: 20%;
   border: solid;
 }
 .search-display{
@@ -71,4 +71,12 @@
 .controllers{margin: 20px;}
 .current-text{
   margin: 5px;
+}
+.user-profile{
+  width: 3%;
+  border-radius: 50%;
+}
+.users-tab{
+  text-align: right;
+  /* border:solid; */
 }

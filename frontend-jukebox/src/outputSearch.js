@@ -27,20 +27,7 @@ class outputSearch extends Component {
         // console.log(uri)
         SpotifyWebApi.queue(uri);
     }
-    // addToQueue = (result)=>{
-    //     this.setState({
-    //         track:{
-    //             // id:this.state.id+1,
-    //             trackImage: result.album.images[0].url,
-    //             trackName: result.name,
-    //             trackURI:result.uri,
-    //             trackArtist:""
-    //         }
-    //     })
-    //     var temp = this.state.track
-    //     queue.addtoQueue(temp);
-    // }
-    
+
 
     render() {
         return (
