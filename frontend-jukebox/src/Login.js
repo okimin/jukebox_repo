@@ -13,9 +13,11 @@ class Login extends Component {
         }
         this.state={
             loggedIn: token? true: false,            
-            token: token        
+            token: token,
+        
         }        
     };
+
     checkLogin(){        
         return this.token? true: false
     }
@@ -23,7 +25,7 @@ class Login extends Component {
         // console.log(this.state.token)
         return this.state.token;
     }
-     getHashParams() {
+    getHashParams() {
         var hashParams = {};
         var e, r = /([^&;=]+)=?([^&;]*)/g,
             q = window.location.hash.substring(1);
@@ -33,7 +35,7 @@ class Login extends Component {
            e = r.exec(q)
         }
         return hashParams;
-      }
+    }
       
     render() {
         return (

@@ -1,3 +1,11 @@
+button{
+  /* width: 100px;
+  min-height: 50px; */
+  margin: 10px;
+}
+.btn{
+  min-height: 30px;
+}
 .App-bg{
   text-align: center;
   background-color: 	#bfa474;
@@ -52,6 +60,13 @@
   right: 10px;
 
 }
+.login{
+  text-align: left;
+  padding: 20px;
+}
+/* .Enter{
+  /* width: 20px;
+} */
 .album{
   width: 20%;
   border: solid;

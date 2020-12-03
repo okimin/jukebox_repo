@@ -2,43 +2,62 @@ import React, { Component } from 'react';
 import {Link} from "react-router-dom"
 import './App.css';
 import axios from 'axios';
+import Login from './Login';
+
+
+const login = new Login()
+const params = login.getToken()
 
 class App extends Component {
 
     constructor(props){
       super(props);
       this.state={
-        roomCode:"",
+        roomCode:"#",
         roomIndex:0,
-        roomMade: false
+        roomMade: false,
+        username:""
       }
     }
     createRoom = ()=> {
+
       console.log("This will create a new room woohoo")
       /// Get input for Host Name and number of users needs
       /// Create a random 6 digit room code
-      var results =''
+      //need to find token first 
+      
+      if(params === undefined) {
+        window.alert("You must login to spotify first if you are making a new room")
+        return;
+      }
+      console.log( params)
+      console.log(typeof params)
+      console.log(params.length);
+      var results ='#'
       var char ='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
       var charactersLength = char.length;
       for ( var i = 0; i < 6; i++ ) {
          results += char.charAt(Math.floor(Math.random() * charactersLength));
       }
+     
       axios
       .post('https://jukeberry-api.herokuapp.com/api/home', 
       {
         roomID: results,
         host: results,
         votes_to_skip: 1,
+        access_token: params
       })
       .then(
         res => {
-          // console.log(res)
+          console.log(res)
           var data = res.data
-          this.setState({roomIndex:data.length})
+          // this.setState({roomIndex:data.length})
       }
       )
       .catch(err=>console.error(err))
-      this.setState({roomMade:true})
+      this.setState({roomCode:results})
+      // this.setState({roomMade:true})
     } 
     getRoomStatus=()=>{
       return this.state.roomMade;
@@ -55,30 +74,51 @@ class App extends Component {
       // Request passcode and enter the correct room
       // Make a GET request to enter that shit
       // start adding songs!
-      axios.get("https://jukeberry-api.herokuapp.com/api/home")
-      .then(res => {
-        var data = res.data
-        console.log(data)
-        for (var i=0;i<data.length;i++){
-          if(data[i].roomID===this.state.roomCode){
-            console.log("Found room!",i)
-            this.setState({roomIndex:i})
-            return 
+      if(this.state.username !==""){
+        axios.get("https://jukeberry-api.herokuapp.com/api/home")
+        .then(res => {
+          var data = res.data
+          console.log(this.state.roomCode)
+          for (var i=0;i<data.length;i++){
+            
+            if(data[i].host.includes(this.state.roomCode)){
+              // console.log("Found room!",i)
+              this.setState({roomState:true})
+              console.log(data[i].host)
+              return 
+            }
+            else{console.log("no");}
           }
-        }
-        window.alert("Room was not found\n try again or mayb a different code")
-        // console.log("room not found")
-      })
+          window.alert("Room was not found\n try again or maybe a different code")
+          // console.log("room not found")
+        })
+      }
+      else{
+        window.alert("enter username")
+      }
     }
-
- render(){ 
+  handleUserName =(e)=>{
+    this.setState({username:e.target.value})
+  }
+  handleNameSubmit =()=>{}
+  render(){ 
    return (
     <div className="App-bg">
-     
+      <div className="login">
+      <Login /> 
+     </div>
+     <form onSubmit={this.handleNameSubmit}>
+          <label>Username</label><br/>
+          <input 
+            type="text"
+            id="user-name" 
+            name="username-box" 
+            value={this.state.username}
+            onChange={this.handleUserName}
+            />
+        </form>
       <div className="options">
-        <Link to="/Room">
-          <button onClick={this.createRoom}>Make A Room</button>
-        </Link>  
+        <button onClick={this.createRoom} className="btn makeRoom-btn">Make A Room</button>          
         <form onSubmit={this.handleSubmit}>
           <label>Join Room</label><br/>
           <input 
@@ -88,14 +128,16 @@ class App extends Component {
             value={this.state.roomCode}
             onChange={this.handleRoomCode}
             />
-          <Link to="/Room">
-            <button>Enter room</button>
-          </Link>
+            <br/>
+            <button>check</button>          
         </form>
         
-        
-      </div>
-
+      </div>  
+      {this.state.roomState &&        
+      <Link to={`/Room/${this.state.roomCode}`}>
+        <button  className="btn enter-btn">Enter room</button>
+      </Link> 
+      }
     </div>
   );
 }

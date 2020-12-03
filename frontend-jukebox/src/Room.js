@@ -3,7 +3,7 @@ import "./App.css";
 // import { Link } from "react-router-dom";
 import Spotify from "spotify-web-api-js";
 
-import Login from "./Login"
+// import Login from "./Login"
 import Queue from "./QueueComponent";
 import Search from "./Search";
 import queue from "./Queue";
@@ -14,17 +14,16 @@ import axios from "axios";
 
 const queues = new queue()
 const app = new App()
-const login = new Login()
+// const login = new Login()
 const SpotifyWebApi = new Spotify();
-const params = login.getToken()
-
+// const params = login.getToken()
+// 
 class Room extends Component {
+    _isMounted= false;
     constructor(props){
         super(props);
         
-        // const results = this.MakeRoom()
-
-        
+        // const results = this.MakeRoom()        
         this.state={
 
             nowPlaying:{
@@ -42,10 +41,10 @@ class Room extends Component {
             show: false,
             queueArray:[],
             songState:true,
-            roomCode:""
+            roomCode:"",
+            token:""
         }
 
-      
         // this.getNowPlaying = this.getNowPlaying.bind(this);
         this.getItemsPlaying = this.getItemsPlaying.bind(this);
         this.SearchSongButton = this.SearchSongButton.bind(this);
@@ -56,35 +55,59 @@ class Room extends Component {
     }
    
     componentDidMount(){
-        SpotifyWebApi.setAccessToken(params);
+        // SpotifyWebApi.setAccessToken(params);
+        this._isMounted = true
         this.getItemsPlaying();
         this.getUser();
         this.getRoom();
         setInterval(this.getItemsPlaying,3000);
         setInterval(this.getUser,3000);
-
     }
 
+    componentWillUnmount(){
+        this._isMounted = false;
+        this.setState({roomCode:""})
+        // console.log("unmounted")
+    }
+    getHashParams() {
+        var hashParams = {};
+        var e, r = /([^&;=]+)=?([^&;]*)/g,
+            q = window.location.hash.substring(1);
+        
+        return q;
+    }
     getRoom = () => {
         // var temp 
         var index =app.getRoomIndex();
-        console.log(index)
-        
+        // console.log(index)
+        var codeLink = this.getHashParams();
+        // console.log(codeLink);
         axios.get('https://jukeberry-api.herokuapp.com/api/home')
         .then(res=>{
-            console.log(res)
-            var roomInfo = res.data
-           
-            this.setState({roomCode: roomInfo[index].roomID})
-            // temp=roomInfo[roomInfo.length-1].roomID
+            if(this._isMounted && codeLink!==""){
+                // console.log(res)
+                var roomInfo = res.data  
+                // console.log(roomInfo)
+                for(var i=0; i<roomInfo.length;i++){
+                    // console.log(codeLink)
+                    if(roomInfo[i].host.includes(codeLink)){
+                        this.setState({token:roomInfo[i].access_token})
+                        // console.log(roomInfo[i].host)
+                        SpotifyWebApi.setAccessToken(roomInfo[i].access_token)
+                        this.setState({roomCode: roomInfo[i].host})
+                    }
+                }         
+            }
         })
         .catch(err=>console.error(err))
         // console.log(temp)
         // return temp
+        // window.history.back()
     }
     getItemsPlaying = () =>{        
         SpotifyWebApi.getMyCurrentPlayingTrack()
         .then((res) => { 
+            if(this._isMounted){
             this.setState({
                 nowPlaying:{
                     playName:res.item.name,
@@ -93,6 +116,7 @@ class Room extends Component {
                 
                 }
             })
+            }
         })
         .catch(e=>{console.log(e)})
 
@@ -131,6 +155,7 @@ class Room extends Component {
         SpotifyWebApi.getMe()
         .then(res=>{
             // console.log(res)
+            if(this._isMounted){
             this.setState({
                 user:{
                     name:res.display_name,
@@ -138,16 +163,17 @@ class Room extends Component {
                     // email:res.item.artists[0].name               
                 }                
             })
-            
+            }            
         })
         .catch(err => {console.log(err)})
     }    
+    
     render(){
         return(
             <React.Fragment>
                 <div className="room-css">
-                    <Login/>                            
-                    <p className='room-code'> {this.state.roomCode}</p>
+                    {/* <Login/>                             */}
+                    <p className='room-code'>Room Code: {this.state.roomCode}</p>
                         <div className="currently-playing">
                         <div className="tracks"> 
                             <div>

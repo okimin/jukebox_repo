@@ -9,7 +9,8 @@ export default ()=>(
         <Switch>
             <Route exact path="/" component={Main}/>
             <Route path="/Main" component={Main} />
-            <Route path ="/Room" component={Room}/>
+            <Route exact path ="/Room" component={Room}/>
+            <Route path ="/Room/:id" component={Room}/>
             <Route path ="/User" component={User}/>
 
         </Switch>
