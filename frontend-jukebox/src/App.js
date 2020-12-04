@@ -6,8 +6,8 @@ import Login from './Login';
 
 
 const login = new Login()
-const params = login.getToken()
-
+const params = login.getAccessToken()
+const refresh = login.getRefreshToken()
 class App extends Component {
 
     constructor(props){
@@ -25,14 +25,17 @@ class App extends Component {
       /// Get input for Host Name and number of users needs
       /// Create a random 6 digit room code
       //need to find token first 
-      
+      if(this.state.username ===""){
+        window.alert("enter a username")
+        return;
+      }
       if(params === undefined) {
         window.alert("You must login to spotify first if you are making a new room")
         return;
       }
-      console.log( params)
-      console.log(typeof params)
-      console.log(params.length);
+      // console.log( params)
+      // console.log(typeof params)
+      // console.log(params.length);
       var results ='#'
       var char ='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
       var charactersLength = char.length;
@@ -46,7 +49,9 @@ class App extends Component {
         roomID: results,
         host: results,
         votes_to_skip: 1,
-        access_token: params
+        access_token: params,
+        host_name:this.state.username,
+        refresh_token:refresh
       })
       .then(
         res => {
@@ -78,13 +83,15 @@ class App extends Component {
         axios.get("https://jukeberry-api.herokuapp.com/api/home")
         .then(res => {
           var data = res.data
-          console.log(this.state.roomCode)
+          // console.log(this.state.roomCode)
           for (var i=0;i<data.length;i++){
-            
+            // console.log(data);
             if(data[i].host.includes(this.state.roomCode)){
               // console.log("Found room!",i)
               this.setState({roomState:true})
-              console.log(data[i].host)
+              // console.log(data[i].host)
+              data[i].guests.push(this.state.username)
+              console.log(data[i].guests);
               return 
             }
             else{console.log("no");}
@@ -101,6 +108,11 @@ class App extends Component {
     this.setState({username:e.target.value})
   }
   handleNameSubmit =()=>{}
+  enterRoom = ()=>{
+    // axios.post{
+
+    // }
+  }
   render(){ 
    return (
     <div className="App-bg">
@@ -135,7 +147,7 @@ class App extends Component {
       </div>  
       {this.state.roomState &&        
       <Link to={`/Room/${this.state.roomCode}`}>
-        <button  className="btn enter-btn">Enter room</button>
+        <button className="btn enter-btn" onClick ={this.enterRoom}>Enter room</button>
       </Link> 
       }
     </div>

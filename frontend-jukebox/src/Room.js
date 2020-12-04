@@ -23,7 +23,9 @@ class Room extends Component {
     constructor(props){
         super(props);
         
-        // const results = this.MakeRoom()        
+        // const results = this.MakeRoom()     
+        console.log(SpotifyWebApi.getAccessToken());   
+        // SpotifyWebApi.setAccessToken
         this.state={
 
             nowPlaying:{
@@ -62,6 +64,9 @@ class Room extends Component {
         this.getRoom();
         setInterval(this.getItemsPlaying,3000);
         setInterval(this.getUser,3000);
+        var temptoken = SpotifyWebApi.getAccessToken()
+        console.log(temptoken);
+
     }
 
     componentWillUnmount(){
@@ -72,8 +77,7 @@ class Room extends Component {
     getHashParams() {
         var hashParams = {};
         var e, r = /([^&;=]+)=?([^&;]*)/g,
-            q = window.location.hash.substring(1);
-        
+            q = window.location.hash.substring(1);        
         return q;
     }
     getRoom = () => {
@@ -87,14 +91,16 @@ class Room extends Component {
             if(this._isMounted && codeLink!==""){
                 // console.log(res)
                 var roomInfo = res.data  
-                // console.log(roomInfo)
+                console.log(roomInfo)
                 for(var i=0; i<roomInfo.length;i++){
                     // console.log(codeLink)
                     if(roomInfo[i].host.includes(codeLink)){
                         this.setState({token:roomInfo[i].access_token})
-                        // console.log(roomInfo[i].host)
+                        console.log(roomInfo[i].access_token)
                         SpotifyWebApi.setAccessToken(roomInfo[i].access_token)
+                        console.log(SpotifyWebApi.getAccessToken())
                         this.setState({roomCode: roomInfo[i].host})
+                        // SpotifyWebApi.
                     }
                 }         
             }
@@ -116,6 +122,7 @@ class Room extends Component {
                 
                 }
             })
+            
             }
         })
         .catch(e=>{console.log(e)})
@@ -152,22 +159,24 @@ class Room extends Component {
         }
     }
     getUser =() => {
-        SpotifyWebApi.getMe()
-        .then(res=>{
-            // console.log(res)
-            if(this._isMounted){
-            this.setState({
-                user:{
-                    name:res.display_name,
-                    profileImage:res.images[0].url,
-                    // email:res.item.artists[0].name               
-                }                
+        if(this._isMounted){
+            SpotifyWebApi.getMe()
+            .then(res=>{
+                // console.log(res)
+                if(this._isMounted){
+                this.setState({
+                    user:{
+                        name:res.display_name,
+                        profileImage:res.images[0].url,
+                        // email:res.item.artists[0].name               
+                    }                
+                })
+                }            
             })
-            }            
-        })
-        .catch(err => {console.log(err)})
+            .catch(err => {console.log(err)})
+        }
     }    
-    
+
     render(){
         return(
             <React.Fragment>

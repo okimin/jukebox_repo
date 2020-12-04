@@ -13,22 +13,26 @@ class Login extends Component {
         }
         this.state={
             loggedIn: token? true: false,            
-            token: token,
-        
+            accessToken: token,
+            refreshToken: params.refresh_token
         }        
     };
 
     checkLogin(){        
         return this.token? true: false
     }
-    getToken=()=>{
+    getAccessToken=()=>{
         // console.log(this.state.token)
-        return this.state.token;
+        return this.state.accessToken;
+    }
+    getRefreshToken=()=>{
+        return this.state.refreshToken;
     }
     getHashParams() {
         var hashParams = {};
         var e, r = /([^&;=]+)=?([^&;]*)/g,
             q = window.location.hash.substring(1);
+            
         e = r.exec(q)
         while (e ) {
            hashParams[e[1]] = decodeURIComponent(e[2]);
@@ -40,7 +44,7 @@ class Login extends Component {
     render() {
         return (
             <div>
-                <a href='http://localhost:8888' >
+                <a href='https://juekbox-auth.herokuapp.com/login' >
                     Login to Spotify 
                 </a>
             </div>

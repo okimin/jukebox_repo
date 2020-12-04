@@ -9,7 +9,7 @@ import "./App.css"
 const SpotifyWebApi = new Spotify();
 const login = new Login()
 
-const params = login.getToken()
+const params = login.getAccessToken()
 class Search extends Component {
     constructor(props){
         super(props);
@@ -18,6 +18,13 @@ class Search extends Component {
             searchInput: "",
             searchArray: []
         }
+    }
+    componentDidMount(){
+        // axios.get("https://jukeberry-api.herokuapp.com/api/home")
+        // .then(res => {
+        //     params = res.data
+        // })
+        // .catch(err=>console.error(err))
     }
     getSearch = event =>{
         event.preventDefault();
