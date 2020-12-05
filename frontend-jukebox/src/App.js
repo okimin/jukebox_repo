@@ -19,6 +19,9 @@ class App extends Component {
         username:""
       }
     }
+    componentWillUnmount(){
+      this.setState({roomMade:"#"})
+    }
     createRoom = ()=> {
 
       console.log("This will create a new room woohoo")
@@ -63,7 +66,7 @@ class App extends Component {
       )
       .catch(err=>console.error(err))
       this.setState({roomCode:results})
-      // this.setState({roomMade:true})
+      this.setState({roomMade:true})
     } 
     // IF ROOM WAS MADE
     getRoomStatus=()=>{
@@ -83,6 +86,7 @@ class App extends Component {
       // Make a GET request to enter that shit
       // start adding songs!
       if(this.state.username !==""){
+        
         axios.get("https://jukeberry-api.herokuapp.com/api/home")
         .then(res => {
           var data = res.data
@@ -92,7 +96,17 @@ class App extends Component {
               // console.log("Found room!",i)
               this.setState({roomState:true})
               // console.log(data[i].host)
-              data[i].guests.push(this.state.username)
+              // data[i].guests.push(this.state.username)
+              if(!this.state.roomMade){
+                console.log("adding to room");
+                axios.post("https://jukeberry-api.herokuapp.com/api/adduser",{
+                name:this.state.username,
+                songs_added: 0,
+                room_code:this.state.roomCode
+                })
+                .then(res=> console.log(res))
+                .catch(err=> console.error(err))
+              }
               console.log(data[i].guests);
               return 
             }

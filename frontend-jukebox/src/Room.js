@@ -18,7 +18,7 @@ class Room extends Component {
         super(props);
         
         // const results = this.MakeRoom()     
-        console.log(SpotifyWebApi.getAccessToken());   
+        // console.log(SpotifyWebApi.getAccessToken());   
         this.state={
 
             nowPlaying:{
@@ -37,7 +37,9 @@ class Room extends Component {
             queueArray:[],
             songState:true,
             roomCode:"", //room code 
-            token:"" // Accesstoken
+            token:"", // Accesstoken
+            username:"",
+            guests:[]
         }
 
         // this.getNowPlaying = this.getNowPlaying.bind(this);
@@ -67,6 +69,16 @@ class Room extends Component {
         this.setState({roomCode:""})
         this.setState({token:""})
         // console.log("unmounted")
+        var tempGuest = this.state.guests
+
+        for(var i =0; i<tempGuest.length;i++){
+            if(tempGuest[i]===this.state.username){
+                tempGuest.splice(i,1)
+                return;
+            }
+        }
+        this.setState({username:""})
+        this.setState({guests:tempGuest})
     }
 
     //GETS THE ROOM CODE IN THE URL 
@@ -87,6 +99,9 @@ class Room extends Component {
                     if(roomInfo[i].code.includes(codeLink)){
                         this.setState({token:roomInfo[i].access_token})
                         // console.log(roomInfo[i].access_token)
+                       var tempGuest = roomInfo[i].guests
+                        this.setState({guests: tempGuest})
+                        this.setState({username: tempGuest[tempGuest.length-1]})
                         SpotifyWebApi.setAccessToken(roomInfo[i].access_token)
                         // ())
                         this.setState({roomCode: roomInfo[i].code})
@@ -101,7 +116,7 @@ class Room extends Component {
         SpotifyWebApi.getMyCurrentPlayingTrack()
         .then((res) => { 
             if(this._isMounted){
-                console.log(res)
+                // console.log(res)
                 //RETRIEVES NAME, IMAGE AND ARTST FOR PARAMETERS
             this.setState({
                 nowPlaying:{
@@ -188,7 +203,13 @@ class Room extends Component {
                             {this.showSearchResults()}
                             <div className="users-tab">
                               Host:  <img src={this.state.user.profileImage} alt="host" className ="user-profile"/>
+                              <br/>
+                              You: {this.state.username}
+                              <br/>
                               Guests:
+                              {this.state.guests.map(guest=>(
+                                <div>{guest}</div> 
+                              ))}
                               <div>
                                   <ul>
                                       <li></li>
