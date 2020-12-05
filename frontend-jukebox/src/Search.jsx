@@ -9,14 +9,17 @@ import "./App.css"
 const SpotifyWebApi = new Spotify();
 const login = new Login()
 
-const params = login.getAccessToken()
+// const params = login.getAccessToken()
 class Search extends Component {
+   
     constructor(props){
+        // params = this.props
         super(props);
-        SpotifyWebApi.setAccessToken(params)
+        // SpotifyWebApi.setAccessToken(params)
         this.state={
             searchInput: "",
-            searchArray: []
+            searchArray: [],
+            params: this.props.access_token
         }
     }
     componentDidMount(){
@@ -29,19 +32,14 @@ class Search extends Component {
     getSearch = event =>{
         event.preventDefault();
         SpotifyWebApi.searchTracks(this.state.searchInput)
-        .then(res => {
-            
+        .then(res => {            
             this.setState({
                 searchArray: res.tracks.items
             })
-
-            // console.log(newJson)}
         }).catch(e=>console.log(e))
-
     }
     getToken=()=>{
-        SpotifyWebApi.setAccessToken(params)
-
+        // SpotifyWebApi.setAccessToken(this.state.params)
     }
     getSearchValue=(e)=>{
         this.setState({searchInput: e.target.value })
@@ -49,7 +47,7 @@ class Search extends Component {
     render() {
         return (
             <div className="search-display">
-                {this.getToken()}
+                {/* {this.getToken()} */}
                 {/* {this.getSearch()} */}
                 <form className="search-songs" onSubmit={this.getSearch}>
                     <label> Search Song </label>
@@ -64,8 +62,6 @@ class Search extends Component {
 
                 </form>
                     <OutputSearch results={this.state.searchArray} ></OutputSearch>
-
-                
             </div>
         );
     }

@@ -44,8 +44,8 @@ class Login extends Component {
     render() {
         return (
             <div>
-                <a href='http://localhost:8888/login' >
-                {/* <a href='https://juekbox-auth.herokuapp.com/login' > */}
+                {/* <a href='http://localhost:8888/login' > */}
+                <a href='https://juekbox-auth.herokuapp.com/login' >
                     Login to Spotify 
                 </a>
             </div>

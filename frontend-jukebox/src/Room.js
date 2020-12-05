@@ -3,18 +3,12 @@ import "./App.css";
 // import { Link } from "react-router-dom";
 import Spotify from "spotify-web-api-js";
 
-// import Login from "./Login"
-// import Queue from "./QueueComponent";
 import Search from "./Search";
-// import queue from "./Queue";
-// import Async from 'react-async';
+
 import QueueComponent from "./QueueComponent";
 // import App from './App'
 import axios from "axios";
 
-// const queues = new queue()
-// const app = new App()
-// const login = new Login()
 const SpotifyWebApi = new Spotify();
 // const params = login.getToken()
 // 
@@ -25,7 +19,6 @@ class Room extends Component {
         
         // const results = this.MakeRoom()     
         console.log(SpotifyWebApi.getAccessToken());   
-        // SpotifyWebApi.setAccessToken
         this.state={
 
             nowPlaying:{
@@ -43,8 +36,8 @@ class Room extends Component {
             show: false,
             queueArray:[],
             songState:true,
-            roomCode:"",
-            token:""
+            roomCode:"", //room code 
+            token:"" // Accesstoken
         }
 
         // this.getNowPlaying = this.getNowPlaying.bind(this);
@@ -64,7 +57,7 @@ class Room extends Component {
         this.getRoom();
         setInterval(this.getItemsPlaying,3000);
         setInterval(this.getUser,3000);
-        var temptoken = SpotifyWebApi.getAccessToken()
+        var temptoken = SpotifyWebApi.getAccessToken();
         console.log(temptoken);
 
     }
@@ -72,63 +65,57 @@ class Room extends Component {
     componentWillUnmount(){
         this._isMounted = false;
         this.setState({roomCode:""})
+        this.setState({token:""})
         // console.log("unmounted")
     }
-    getHashParams() {
-        // var hashParams = {};
+
+    //GETS THE ROOM CODE IN THE URL 
+    getHashURLCode() {
         var q = window.location.hash.substring(1);        
         return q;
     }
+
+    //GETS ALL THE INFORMATION FROM THE ROOM USING THE ROOM CODE TO  
     getRoom = () => {
-        // var temp 
-        // var index =app.getRoomIndex();
-        // console.log(index)
-        var codeLink = this.getHashParams();
-        // console.log(codeLink);
+        var codeLink = this.getHashURLCode();
         axios.get('https://jukeberry-api.herokuapp.com/api/home')
         .then(res=>{
             if(this._isMounted && codeLink!==""){
-                // console.log(res)
                 var roomInfo = res.data  
                 console.log(roomInfo)
                 for(var i=0; i<roomInfo.length;i++){
-                    // console.log(codeLink)
-                    if(roomInfo[i].host.includes(codeLink)){
+                    if(roomInfo[i].code.includes(codeLink)){
                         this.setState({token:roomInfo[i].access_token})
-                        console.log(roomInfo[i].access_token)
+                        // console.log(roomInfo[i].access_token)
                         SpotifyWebApi.setAccessToken(roomInfo[i].access_token)
-                        console.log(SpotifyWebApi.getAccessToken())
-                        this.setState({roomCode: roomInfo[i].host})
-                        // SpotifyWebApi.
+                        // ())
+                        this.setState({roomCode: roomInfo[i].code})
                     }
                 }         
             }
         })
         .catch(err=>console.error(err))
-        // console.log(temp)
-        // return temp
-        // window.history.back()
     }
+    //GETS THE CURRENT PLAYING SONG 
     getItemsPlaying = () =>{        
         SpotifyWebApi.getMyCurrentPlayingTrack()
         .then((res) => { 
             if(this._isMounted){
                 console.log(res)
+                //RETRIEVES NAME, IMAGE AND ARTST FOR PARAMETERS
             this.setState({
                 nowPlaying:{
                     playName:res.item.name,
                     playImage:res.item.album.images[0].url,
-                    playArtist:res.item.artists[0].name   
-                
+                    playArtist:res.item.artists[0].name                   
                 }
             })
             
             }
         })
         .catch(e=>{console.log(e)})
-
-       
     }
+    //SEARC SONG METHODS 
     SearchSongButton = () =>{
         this.setState({show: !this.state.show})
         // console.log(this.state.show)
@@ -136,10 +123,11 @@ class Room extends Component {
     showSearchResults =() => {
         if(this.state.show){
             return(
-                <Search/>
+                <Search access_token ={this.state.token}/>
             )
         }
     }
+    //TOGGLE AND MODIFY SONG/QUEUE
     nextSong = () => {
         SpotifyWebApi.skipToNext()
         this.getItemsPlaying()
@@ -176,7 +164,6 @@ class Room extends Component {
             .catch(err => {console.log(err)})
         }
     }    
-
     render(){
         return(
             <React.Fragment>

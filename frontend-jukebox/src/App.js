@@ -14,7 +14,7 @@ class App extends Component {
       super(props);
       this.state={
         roomCode:"#",
-        roomIndex:0,
+        // roomIndex:0,
         roomMade: false,
         username:""
       }
@@ -24,38 +24,39 @@ class App extends Component {
       console.log("This will create a new room woohoo")
       /// Get input for Host Name and number of users needs
       /// Create a random 6 digit room code
-      //need to find token first 
+      
+      //to create room you need to input a username
       if(this.state.username ===""){
         window.alert("enter a username")
         return;
       }
+      //need to find token first 
       if(params === undefined) {
         window.alert("You must login to spotify first if you are making a new room")
         return;
       }
-      // console.log( params)
-      // console.log(typeof params)
-      // console.log(params.length);
-      var results ='#'
+
+      var results ='#' //room code 
       var char ='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
       var charactersLength = char.length;
+// CREATE RANSDOM STRING OF LENGTH 6 FOR ROOM CODE 
       for ( var i = 0; i < 6; i++ ) {
          results += char.charAt(Math.floor(Math.random() * charactersLength));
-      }
-     
+      }    
+      //CREATES A NEW ROOM IN THE BACKEND  
       axios
       .post('https://jukeberry-api.herokuapp.com/api/home', 
       {
-        code: results,
-        // host: results,
+        code: results, //room code 
+        host: results,
         votes_to_skip: 0,
-        access_token: params,
+        access_token: params, 
         host_name:this.state.username,
         refresh_token:refresh
       })
       .then(
         res => {
-          // console.log(res)
+          console.log(res)
           // var data = res.data
           // this.setState({roomIndex:data.length})
       }
@@ -64,12 +65,14 @@ class App extends Component {
       this.setState({roomCode:results})
       // this.setState({roomMade:true})
     } 
+    // IF ROOM WAS MADE
     getRoomStatus=()=>{
       return this.state.roomMade;
     }
     getRoomIndex=()=>{
       return this.state.roomIndex;
     }
+    //ROOMCODE 
     handleRoomCode =(e)=>{
       this.setState({roomCode: e.target.value })
     }
@@ -83,10 +86,9 @@ class App extends Component {
         axios.get("https://jukeberry-api.herokuapp.com/api/home")
         .then(res => {
           var data = res.data
-          // console.log(this.state.roomCode)
           for (var i=0;i<data.length;i++){
-            // console.log(data);
-            if(data[i].host.includes(this.state.roomCode)){
+            //SEARCHES FOR ROOM 
+            if(data[i].code.includes(this.state.roomCode)){
               // console.log("Found room!",i)
               this.setState({roomState:true})
               // console.log(data[i].host)
@@ -94,7 +96,7 @@ class App extends Component {
               console.log(data[i].guests);
               return 
             }
-            else{console.log("no");}
+            // else{console.log("no");}
           }
           window.alert("Room was not found\n try again or maybe a different code")
           // console.log("room not found")
@@ -107,19 +109,13 @@ class App extends Component {
   handleUserName =(e)=>{
     this.setState({username:e.target.value})
   }
-  handleNameSubmit =()=>{}
-  enterRoom = ()=>{
-    // axios.post{
-
-    // }
-  }
   render(){ 
    return (
     <div className="App-bg">
       <div className="login">
       <Login /> 
      </div>
-     <form onSubmit={this.handleNameSubmit}>
+     <form>
           <label>Username</label><br/>
           <input 
             type="text"
