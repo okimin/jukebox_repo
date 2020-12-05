@@ -12,7 +12,6 @@ export default ()=>(
             <Route exact path ="/Room" component={Room}/>
             <Route path ="/Room/:id" component={Room}/>
             <Route path ="/User" component={User}/>
-
         </Switch>
     
 );

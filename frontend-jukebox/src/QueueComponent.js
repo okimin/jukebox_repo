@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import SpotifyWebApi from 'spotify-web-api-js';
+import Spotify from 'spotify-web-api-js';
 import "./App.css";
+
+const SpotifyWebApi = new Spotify();
 class QueueComponent extends Component {
 
     getQueue = () => {
-        SpotifyWebApi.queue()
+        // SpotifyWebApi.getMyCurrentPlayingTrack
     }
     render() {
         return (

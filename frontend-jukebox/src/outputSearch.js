@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 // import Queue from ""
   
-import Queue from "./Queue";
+// import Queue from "./Queue";
 import Spotify from "spotify-web-api-js";
-import Login from "./Login"
+// import Login from "./Login"
 
-const login = new Login();
+// const login = new Login();
 const SpotifyWebApi = new Spotify();
 
-const queue = new Queue();
+// const queue = new Queue();
 
 class outputSearch extends Component {
     constructor(props){
@@ -38,7 +38,7 @@ class outputSearch extends Component {
                     {/* {index} */}
                     <div className="search-list">
                         <div>
-                        <img src={result.album.images[0].url} className="album album-search"alt= "album conver"/>
+                        <img src={result.album.images[0].url} className="album album-search"alt= "album cover"/>
                         <h3 className='search-text'>{result.name}</h3> 
                         <h4 className='search-text'>{result.artists[0].name}</h4>
                     </div>

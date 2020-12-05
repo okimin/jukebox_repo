@@ -46,17 +46,17 @@ class App extends Component {
       axios
       .post('https://jukeberry-api.herokuapp.com/api/home', 
       {
-        roomID: results,
-        host: results,
-        votes_to_skip: 1,
+        code: results,
+        // host: results,
+        votes_to_skip: 0,
         access_token: params,
         host_name:this.state.username,
         refresh_token:refresh
       })
       .then(
         res => {
-          console.log(res)
-          var data = res.data
+          // console.log(res)
+          // var data = res.data
           // this.setState({roomIndex:data.length})
       }
       )

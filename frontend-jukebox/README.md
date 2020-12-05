@@ -1,3 +1,18 @@
+
+## About this project
+This project uses Spotify Web Api it allows to create Music rooms to be played on a single device. Other technologies used are our own backend rest API, and spotify auth page found below 
+
+### Backend Rest Api 
+insert Link here 
+
+### Spotify Authorization page 
+insert link here
+#### How it works
+1. The first Main page asks for Username to be inputted.
+2. Then you can either join an already existing room by entering room code or make a room.
+3. once room is found or made a button to join appears which users will click
+4. Here in the DJ room you can search for songs and add it to the Queue which will be played on a device. 
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
@@ -66,3 +81,4 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+

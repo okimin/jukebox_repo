@@ -4,16 +4,16 @@ import "./App.css";
 import Spotify from "spotify-web-api-js";
 
 // import Login from "./Login"
-import Queue from "./QueueComponent";
+// import Queue from "./QueueComponent";
 import Search from "./Search";
-import queue from "./Queue";
-import Async from 'react-async';
+// import queue from "./Queue";
+// import Async from 'react-async';
 import QueueComponent from "./QueueComponent";
-import App from './App'
+// import App from './App'
 import axios from "axios";
 
-const queues = new queue()
-const app = new App()
+// const queues = new queue()
+// const app = new App()
 // const login = new Login()
 const SpotifyWebApi = new Spotify();
 // const params = login.getToken()
@@ -75,14 +75,13 @@ class Room extends Component {
         // console.log("unmounted")
     }
     getHashParams() {
-        var hashParams = {};
-        var e, r = /([^&;=]+)=?([^&;]*)/g,
-            q = window.location.hash.substring(1);        
+        // var hashParams = {};
+        var q = window.location.hash.substring(1);        
         return q;
     }
     getRoom = () => {
         // var temp 
-        var index =app.getRoomIndex();
+        // var index =app.getRoomIndex();
         // console.log(index)
         var codeLink = this.getHashParams();
         // console.log(codeLink);
@@ -114,6 +113,7 @@ class Room extends Component {
         SpotifyWebApi.getMyCurrentPlayingTrack()
         .then((res) => { 
             if(this._isMounted){
+                console.log(res)
             this.setState({
                 nowPlaying:{
                     playName:res.item.name,
@@ -186,7 +186,7 @@ class Room extends Component {
                         <div className="currently-playing">
                         <div className="tracks"> 
                             <div>
-                            <img src={this.state.nowPlaying.playImage} className="album" alt="album cover"/>
+                            <img src={this.state.nowPlaying.playImage} className="album" alt="album-cover"/>
                             </div>
                             <h2 className="current-text">{this.state.nowPlaying.playName}</h2>
                             <h4 className="current-text">{this.state.nowPlaying.playArtist}</h4>
@@ -200,7 +200,13 @@ class Room extends Component {
                         <div className="container">
                             {this.showSearchResults()}
                             <div className="users-tab">
-                                <img src={this.state.user.profileImage} className ="user-profile"/>
+                              Host:  <img src={this.state.user.profileImage} alt="host" className ="user-profile"/>
+                              Guests:
+                              <div>
+                                  <ul>
+                                      <li></li>
+                                  </ul>
+                              </div>
                             </div>
                             <QueueComponent></QueueComponent>
                         </div>
