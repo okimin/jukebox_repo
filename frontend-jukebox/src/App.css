@@ -8,11 +8,17 @@ button{
 }
 .App-bg{
   text-align: center;
-  background-color: 	#bfa474;
+  background-color: 	#090000;
   height: 100vh
 }
 button, input{
   border-radius: 10px;
+}
+a:link{
+  color:#bc1142;
+}
+a:visited{
+  color:	#75a927;
 }
 input{height: 20px;}
 .nickname-form{
@@ -21,14 +27,25 @@ input{height: 20px;}
 }
 .room-css{
   padding: 20px;
-  background-color: 	#bfa474;
-  color: 	#6c2525;
+  background-color: 	#090000;
+  color: #bc1142;
+  /* color: 	#6c2525; */
   min-height: 300vh;
 }
 .search-songs{
   margin: 30px;
   text-align: center;
 }
+button{
+  background-color: #3f82f4;
+  color: #090000;
+  font-weight: 900;
+
+}
+.enter-btn{
+  width: 400px;
+}
+
 .makeRoom-btn{
   padding:10px;
   margin-bottom: 20px;
@@ -70,7 +87,12 @@ input{height: 20px;}
   height: fit-content;
   position: absolute;
   right: 10px;
-
+  background-color:#bc1142;
+  font-weight: 800;
+}
+label{
+  color: #bc1142;
+  font-weight: 700;
 }
 .App-bg{position: relative;}
 .App-bg .login{
@@ -92,14 +114,18 @@ input{height: 20px;}
 .album{
   width: 20%;
   border: solid;
+  border-radius: 10%;
+  color: 	#6c2525;
 }
 .search-display{
   width: 95%;
   position: absolute;
   z-index:10;
-  background-color: palegoldenrod;
+  background-color: #3f82f4;
+  color: #090000;
   border-radius: 30px;
   padding: 10px;
+  opacity:.8;
 }
 .search-list{text-align: left;}
 .search-text{

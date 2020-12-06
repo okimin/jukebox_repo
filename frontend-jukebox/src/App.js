@@ -81,52 +81,6 @@ class App extends Component {
       .catch(err=>console.error(err))
       
     }
-//     createRoom = ()=> {
-
-//       console.log("This will create a new room woohoo")
-//       /// Get input for Host Name and number of users needs
-//       /// Create a random 6 digit room code
-      
-//       //to create room you need to input a username
-//       if(this.state.username ===""){
-//         window.alert("enter a nickname")
-//         return;
-//       }
-//       //need to find token first 
-//       if(params === undefined) {
-//         window.alert("You must login to spotify first if you are making a new room")
-//         return;
-//       }
-
-//       var results ='#' //room code 
-//       var char ='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-//       var charactersLength = char.length;
-// // CREATE RANSDOM STRING OF LENGTH 6 FOR ROOM CODE 
-//       for ( var i = 0; i < 6; i++ ) {
-//          results += char.charAt(Math.floor(Math.random() * charactersLength));
-//       }    
-//       //CREATES A NEW ROOM IN THE BACKEND  
-//       axios
-//       .post('https://jukeberry-api.herokuapp.com/api/home', 
-//       {
-//         code: results, //room code 
-//         host: results,
-//         votes_to_skip: 0,
-//         access_token: params, 
-//         host_name:this.state.username,
-//         refresh_token:refresh
-//       })
-//       .then(
-//         res => {
-//           console.log(res)
-//           // var data = res.data
-//           // this.setState({roomIndex:data.length})
-//       }
-//       )
-//       .catch(err=>console.error(err))
-//       this.setState({roomCode:results})
-//       this.setState({roomMade:true})
-//     } 
     // IF ROOM WAS MADE
     getRoomStatus=()=>{
       return this.state.roomMade;
@@ -214,12 +168,12 @@ class App extends Component {
      
       {/* </div>   */}
       <Login />  
-      </div> 
+      
       {this.state.roomState &&        
       <Link to={`/Room/${this.state.roomCode}`}>
         <button className="btn enter-btn" onClick ={this.enterRoom}>Enter room</button>
       </Link>        
-      }
+      }</div> 
     </div>
   );
 }

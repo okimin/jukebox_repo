@@ -46,7 +46,7 @@ class outputSearch extends Component {
                     onClick={()=> this.addToQueue(result.uri)} 
                     className='add-song-btn'
                     >
-                        Add song
+                        + Add Song
                     </button>
                    </div>
                </div>

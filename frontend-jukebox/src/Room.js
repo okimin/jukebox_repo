@@ -198,8 +198,8 @@ class Room extends Component {
             <React.Fragment>
                 <div className="room-css">
                     {/* <Login/>                             */}
-                    <p className='room-code'>Room Code: {this.state.roomCode}</p>
-        <div>Votes to skip current song: {this.state.skipVote}</div>
+                    <p className='room-code'><h4>Room Code: {this.state.roomCode}</h4></p>
+        <div><h4>Votes to skip current song: {this.state.skipVote}</h4></div>
                         <div className="currently-playing">
                         <div className="tracks"> 
                             <div>

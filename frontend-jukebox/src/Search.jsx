@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Login from "./Login";
+// import Login from "./Login";
 import OutputSearch from "./outputSearch";
 
 import Spotify from "spotify-web-api-js";
