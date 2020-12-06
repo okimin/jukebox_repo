@@ -7,7 +7,7 @@ import Spotify from "spotify-web-api-js";
 import "./App.css"
 
 const SpotifyWebApi = new Spotify();
-const login = new Login()
+// const login = new Login()
 
 // const params = login.getAccessToken()
 class Search extends Component {

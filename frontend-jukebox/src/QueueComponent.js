@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Spotify from 'spotify-web-api-js';
 import "./App.css";
 
-const SpotifyWebApi = new Spotify();
+// const SpotifyWebApi = new Spotify();
 class QueueComponent extends Component {
 
     getQueue = () => {

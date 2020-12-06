@@ -39,7 +39,9 @@ class Room extends Component {
             roomCode:"", //room code 
             token:"", // Accesstoken
             username:"",
-            guests:[]
+            guests:[],
+            searchButton:"Search Song",
+            skipVote:0
         }
 
         // this.getNowPlaying = this.getNowPlaying.bind(this);
@@ -68,9 +70,9 @@ class Room extends Component {
         this._isMounted = false;
         this.setState({roomCode:""})
         this.setState({token:""})
-        // console.log("unmounted")
-        var tempGuest = this.state.guests
+        // console.log("unmounted"
 
+        var tempGuest = this.state.guests
         for(var i =0; i<tempGuest.length;i++){
             if(tempGuest[i]===this.state.username){
                 tempGuest.splice(i,1)
@@ -133,6 +135,11 @@ class Room extends Component {
     //SEARC SONG METHODS 
     SearchSongButton = () =>{
         this.setState({show: !this.state.show})
+        if(this.state.searchButton ==="Search Song")
+        this.setState({searchButton:"Hide search"})
+        else{
+            this.setState({searchButton:"Search Song"})
+        }
         // console.log(this.state.show)
     }
     showSearchResults =() => {
@@ -142,10 +149,17 @@ class Room extends Component {
             )
         }
     }
-    //TOGGLE AND MODIFY SONG/QUEUE
+    //TOGGLE AND MODIFY SONG/QUEUE 
+    //modifies the skip song feature
     nextSong = () => {
-        SpotifyWebApi.skipToNext()
-        this.getItemsPlaying()
+        if(this.state.skipVote > this.state.guests.length/2-1){ 
+            SpotifyWebApi.skipToNext()
+            this.getItemsPlaying()
+            this.setState({skipVote:0})
+        }
+        else{
+            this.setState({skipVote:this.state.skipVote+1})
+        }
     }
     previousSong = () => {
         SpotifyWebApi.skipToPrevious()
@@ -185,6 +199,7 @@ class Room extends Component {
                 <div className="room-css">
                     {/* <Login/>                             */}
                     <p className='room-code'>Room Code: {this.state.roomCode}</p>
+        <div>Votes to skip current song: {this.state.skipVote}</div>
                         <div className="currently-playing">
                         <div className="tracks"> 
                             <div>
@@ -194,11 +209,11 @@ class Room extends Component {
                             <h4 className="current-text">{this.state.nowPlaying.playArtist}</h4>
                         </div>
                         <div className='controllers'>    
-                            <button onClick={this.previousSong}> prev </button>
+                            {/* <button onClick={this.previousSong}> prev </button> */}
                             <button onClick={this.pauseSong}> pause </button>
                             <button onClick={this.nextSong}> next </button>
                         </div>
-                        <button onClick={()=>this.SearchSongButton()}>Search Song</button>
+                        <button onClick={()=>this.SearchSongButton()}>{this.state.searchButton}</button>
                         <div className="container">
                             {this.showSearchResults()}
                             <div className="users-tab">
@@ -210,11 +225,11 @@ class Room extends Component {
                               {this.state.guests.map(guest=>(
                                 <div>{guest}</div> 
                               ))}
-                              <div>
+                              {/* <div>
                                   <ul>
                                       <li></li>
                                   </ul>
-                              </div>
+                              </div> */}
                             </div>
                             <QueueComponent></QueueComponent>
                         </div>

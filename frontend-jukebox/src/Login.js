@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import Spotify from "spotify-web-api-js"
 // import Room from "./Room"
+import spotifyBtn from "./images/spotify-btn.png"
 const SpotifyWebApi = new Spotify();
+
 
 class Login extends Component {
     constructor(props){
@@ -43,10 +45,12 @@ class Login extends Component {
       
     render() {
         return (
-            <div>
+            <div className="login-btn">
+                
                 <a href='http://localhost:8888/login' >
+                <div style={{padding: "10px"}}>Login to Spotify </div>
                 {/* <a href='https://juekbox-auth.herokuapp.com/login' > */}
-                    Login to Spotify 
+                    <img src= {spotifyBtn} width="10%" className="spotify Login" alt="login-btn"></img>
                 </a>
             </div>
         );
