@@ -4,10 +4,10 @@ import React, { Component } from 'react';
 // import Queue from "./Queue";
 import Spotify from "spotify-web-api-js";
 // import Login from "./Login"
+import axios from "axios"
 
 // const login = new Login();
 const SpotifyWebApi = new Spotify();
-
 // const queue = new Queue();
 
 class outputSearch extends Component {
@@ -23,9 +23,21 @@ class outputSearch extends Component {
             }
         }
     }
-    addToQueue =(uri)=>{
+    addToQueue =(uri,name,artist,image)=>{
         // console.log(uri)
         SpotifyWebApi.queue(uri);
+        console.log(uri,name,artist,image);
+        axios.post("https://jukeberry-api.herokuapp.com/api/song",
+        {
+            name:name,
+            song_id:uri,
+            song_pic:image,
+            artist_id:artist
+        })
+        .then(res=>{
+            console.log("success");
+        })
+        .catch(err=>{console.error(err);})
     }
 
 
@@ -38,12 +50,14 @@ class outputSearch extends Component {
                     {/* {index} */}
                     <div className="search-list">
                         <div>
-                        <img src={result.album.images[0].url} className="album album-search"alt= "album cover"/>
-                        <h3 className='search-text'>{result.name}</h3> 
-                        <h4 className='search-text'>{result.artists[0].name}</h4>
-                    </div>
+                            <img src={result.album.images[0].url} className="album album-search"alt= "album cover"/>
+                            <h3 className='search-text'>{result.name}</h3> 
+                            <h4 className='search-text'>{result.artists[0].name}</h4>
+                        </div>
                     <button 
-                    onClick={()=> this.addToQueue(result.uri)} 
+                    onClick={()=> {
+                        
+                        this.addToQueue(result.uri,result.name,result.artists[0].name, result.album.images[0].url)}} 
                     className='add-song-btn'
                     >
                         + Add Song

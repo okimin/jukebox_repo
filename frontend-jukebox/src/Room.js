@@ -8,10 +8,13 @@ import Search from "./Search";
 import QueueComponent from "./QueueComponent";
 // import App from './App'
 import axios from "axios";
-
+import logo from "./images/JukeBoxLogo.png"
+// import { useHistory } from "react-router-dom";
+import Back from "./Back";
 const SpotifyWebApi = new Spotify();
 // const params = login.getToken()
 // 
+
 class Room extends Component {
     _isMounted= false;
     constructor(props){
@@ -51,6 +54,7 @@ class Room extends Component {
         this.nextSong =this.nextSong.bind(this)
         this.previousSong =this.previousSong.bind(this);
         this.pauseSong =this.pauseSong.bind(this);
+        this.makePlaylist = this.makePlaylist.bind(this)
     }
    
     componentDidMount(){
@@ -59,28 +63,34 @@ class Room extends Component {
         this.getItemsPlaying();
         this.getUser();
         this.getRoom();
-        setInterval(this.getItemsPlaying,3000);
-        setInterval(this.getUser,3000);
-        var temptoken = SpotifyWebApi.getAccessToken();
-        console.log(temptoken);
+        this.makePlaylist();
+        setInterval(this.getItemsPlaying,2000);
+        setInterval(this.getUser,2000);
+        setInterval(this.getRoom,2000);
+        setInterval(this.makePlaylist,2000)
+        // var temptoken = SpotifyWebApi.getAccessToken();
+        // console.log(temptoken);
 
     }
+    componentDidUpdate(){
 
+    }
     componentWillUnmount(){
         this._isMounted = false;
         this.setState({roomCode:""})
         this.setState({token:""})
         // console.log("unmounted"
 
-        var tempGuest = this.state.guests
-        for(var i =0; i<tempGuest.length;i++){
-            if(tempGuest[i]===this.state.username){
-                tempGuest.splice(i,1)
-                return;
-            }
-        }
+        axios.delete(
+            `https://jukeberry-api.herokuapp.com/api/user
+            ${this.state.roomCode}/${this.state.username}/delete`
+            )
+            .then(res =>{
+                console.log(res)
+            })
+            .catch(err=>console.error(err))
         this.setState({username:""})
-        this.setState({guests:tempGuest})
+        // this.setState({guests:tempGuest})
     }
 
     //GETS THE ROOM CODE IN THE URL 
@@ -88,30 +98,48 @@ class Room extends Component {
         var q = window.location.hash.substring(1);        
         return q;
     }
-
     //GETS ALL THE INFORMATION FROM THE ROOM USING THE ROOM CODE TO  
     getRoom = () => {
+        // console.log(match.params.roomCode);
         var codeLink = this.getHashURLCode();
         axios.get('https://jukeberry-api.herokuapp.com/api/home')
         .then(res=>{
             if(this._isMounted && codeLink!==""){
                 var roomInfo = res.data  
-                console.log(roomInfo)
+                // console.log(roomInfo)
                 for(var i=0; i<roomInfo.length;i++){
                     if(roomInfo[i].code.includes(codeLink)){
                         this.setState({token:roomInfo[i].access_token})
-                        // console.log(roomInfo[i].access_token)
-                       var tempGuest = roomInfo[i].guests
-                        this.setState({guests: tempGuest})
-                        this.setState({username: tempGuest[tempGuest.length-1]})
+                        // console.log(roomInfo[i])
+                        var tempGuest = roomInfo[i].guests
+                        if(tempGuest.length <= 0){
+                            this.setState({username: roomInfo[i].host_name})                            
+                        }
+                        else{
+                            this.setState({guests: tempGuest})
+                            this.setState({username: tempGuest[tempGuest.length-1]})
+                        }
                         SpotifyWebApi.setAccessToken(roomInfo[i].access_token)
-                        // ())
                         this.setState({roomCode: roomInfo[i].code})
                     }
                 }         
             }
         })
         .catch(err=>console.error(err))
+    }
+    makePlaylist=()=>{
+        // console.log("here")
+        if(this._isMounted){
+        // SpotifyWebApi.getMe()
+        // .then(res=>{
+        //     console.log(res)
+        //     SpotifyWebApi.createPlaylist(res.id)
+        //     .then(res=>{console.log("success");})
+        //     .catch(err=>console.error(err))
+        // })
+        // .catch(err=>{console.error(err);})
+        
+        }
     }
     //GETS THE CURRENT PLAYING SONG 
     getItemsPlaying = () =>{        
@@ -132,7 +160,7 @@ class Room extends Component {
         })
         .catch(e=>{console.log(e)})
     }
-    //SEARC SONG METHODS 
+    //SEARCH SONG METHODS 
     SearchSongButton = () =>{
         this.setState({show: !this.state.show})
         if(this.state.searchButton ==="Search Song")
@@ -198,23 +226,35 @@ class Room extends Component {
             <React.Fragment>
                 <div className="room-css">
                     {/* <Login/>                             */}
-                    <p className='room-code'><h4>Room Code: {this.state.roomCode}</h4></p>
-        <div><h4>Votes to skip current song: {this.state.skipVote}</h4></div>
+                    <div className='room-header'>
+                    <div className="column-logo room-logo">       
+                        <img src={logo} width="60px" alt="logo"/>
+                        <h2 className="title">JukeBerry</h2> 
+                    </div>
+                    <div className='room-code'>
+                        <h4>Room Codes: {this.state.roomCode}</h4>
+                    </div>
+                    <Back username={this.state.username} roomCode={this.state.roomCode} guests={this.state.guests}></Back>
+                    {/* <button onClick={this.goBack}> Go Back</button> */}
+                    </div>
+        
                         <div className="currently-playing">
                         <div className="tracks"> 
                             <div>
-                            <img src={this.state.nowPlaying.playImage} className="album" alt="album-cover"/>
+                                <img src={this.state.nowPlaying.playImage} className="album" alt="album-cover"/>
                             </div>
                             <h2 className="current-text">{this.state.nowPlaying.playName}</h2>
                             <h4 className="current-text">{this.state.nowPlaying.playArtist}</h4>
                         </div>
+                        {/* <div></div> */}
                         <div className='controllers'>    
                             {/* <button onClick={this.previousSong}> prev </button> */}
-                            <button onClick={this.pauseSong}> pause </button>
-                            <button onClick={this.nextSong}> next </button>
+                            <button onClick={this.pauseSong}> Pause </button>
+                            <button onClick={this.nextSong}> Next </button>
                         </div>
                         <button onClick={()=>this.SearchSongButton()}>{this.state.searchButton}</button>
                         <div className="container">
+        <h4>Votes to skip current song: {this.state.skipVote} / {this.state.guests.length}</h4>
                             {this.showSearchResults()}
                             <div className="users-tab">
                               Host:  <img src={this.state.user.profileImage} alt="host" className ="user-profile"/>
@@ -222,8 +262,8 @@ class Room extends Component {
                               You: {this.state.username}
                               <br/>
                               Guests:
-                              {this.state.guests.map(guest=>(
-                                <div>{guest}</div> 
+                              {this.state.guests.map((guest,index)=>(
+                                <div key={index}>{guest}</div> 
                               ))}
                               {/* <div>
                                   <ul>
@@ -231,7 +271,7 @@ class Room extends Component {
                                   </ul>
                               </div> */}
                             </div>
-                            <QueueComponent></QueueComponent>
+                            <QueueComponent access_token ={this.state.token}></QueueComponent>
                         </div>
                     </div>                 
                 </div>

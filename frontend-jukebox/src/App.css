@@ -32,6 +32,13 @@ input{height: 20px;}
   /* color: 	#6c2525; */
   min-height: 300vh;
 }
+.room-code{
+  color:	#75a927;
+}
+h1{
+  color: #bc1142;
+
+}
 .search-songs{
   margin: 30px;
   text-align: center;
@@ -43,7 +50,7 @@ button{
 
 }
 .enter-btn{
-  width: 400px;
+  width: 60%;
 }
 
 .makeRoom-btn{
@@ -57,18 +64,33 @@ button{
   align-content: center;
   padding-top: 100px;
 }
-.song-queue{
+/* .song-queue{
   display: flex;
   flex-direction: row;
   justify-content: left;
   align-content: center;
   margin: auto;  
-}
+} */
 .column{
   padding: 10px;
   margin: auto;
 }
-
+.column-logo {
+  display: flex;
+  flex-direction: row;
+  /* border: solid; */
+  width: 20vh;
+  margin: auto;
+  /* temporary bg color */
+  background-color: lightblue; 
+  border-radius: 20px;
+}
+.room-logo{
+  margin: 0px;
+}
+.login .column-logo{
+padding: 0px;
+}
 .currently-playing{
   text-align: center;
 }
@@ -90,20 +112,39 @@ button{
   background-color:#bc1142;
   font-weight: 800;
 }
+.song-queue{
+  
+  border-bottom:solid}
 label{
   color: #bc1142;
   font-weight: 700;
 }
-.App-bg{position: relative;}
+.App-bg{
+  position: relative;
+  /* width: 30%; */
+}
 .App-bg .login{
   /* text-align: left; */
   margin: 0;
   padding: 20px;
   position: absolute;
-  top: 37%;
+  top: 42%;
   left: 50%;
   margin-right: -50%;
-  transform: translate(-50%, -50%) 
+  transform: translate(-50%, -50%);
+}
+.login {   
+  border:solid;
+  color: #bc1142;
+  width: 40%;
+  border-radius: 20px;
+  padding: 0px;
+}
+/* form{
+  width: 100%;
+} */
+.login input, .login label, .login h1{
+  width: 100%;
 }
 .login-btn{
   text-align: center;
@@ -143,3 +184,12 @@ label{
   text-align: right;
   /* border:solid; */
 }
+.song-list{
+  border: solid;
+}
+.row{
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-content: center;
+  margin: auto;  }

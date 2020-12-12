@@ -18,7 +18,6 @@ class Queue extends Component {
         // 
     }
     getQueue=()=>{
-        return this.state.thisQueue;
     }
 
 

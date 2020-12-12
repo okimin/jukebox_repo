@@ -4,6 +4,7 @@ import './App.css';
 import axios from 'axios';
 import Login from './Login';
 
+import logo from "./images/JukeBoxLogo.png"
 
 const login = new Login()
 const params = login.getAccessToken()
@@ -38,6 +39,9 @@ class App extends Component {
       for ( var i = 0; i < 6; i++ ) {
          results += char.charAt(Math.floor(Math.random() * charactersLength));
       }
+      console.log(results);
+      console.log(params.length);
+      console.log(refresh);
       axios
       .post('https://jukeberry-api.herokuapp.com/api/home', 
       {
@@ -111,7 +115,17 @@ class App extends Component {
               // console.log(data[i].host)
               // data[i].guests.push(this.state.username)
               if(!this.state.roomMade){
-                console.log("adding to room");
+                //Adding User
+                axios.post("https://jukeberry-api.herokuapp.com/api/user",{
+                  room_code:this.state.roomCode,
+                  name:this.state.username,
+                  songs_added: 0
+                })
+                .then(res=>{
+                  console.log(res);
+                })
+                .catch(err =>{console.error(err);})
+                console.log("Adding user to room");
                 axios.post("https://jukeberry-api.herokuapp.com/api/adduser",{
                 name:this.state.username,
                 songs_added: 0,
@@ -120,7 +134,7 @@ class App extends Component {
                 .then(res=> console.log(res))
                 .catch(err=> console.error(err))
               }
-              console.log(data[i].guests);
+              // console.log(data[i].guests);
               return 
             }
             // else{console.log("no");}
@@ -139,8 +153,12 @@ class App extends Component {
   render(){ 
    return (
     <div className="App-bg">
-      <div className="login">      
-    
+      <div className="login">  
+      <div className="column-logo">       
+        <img src={logo} width="60px" alt="logo"/>
+        <h2 className="title">JukeBerry</h2>        
+      </div>    
+      
      <form className="nickname-form">
           <label>Nickname</label><br/>
           <input 
@@ -173,7 +191,8 @@ class App extends Component {
       <Link to={`/Room/${this.state.roomCode}`}>
         <button className="btn enter-btn" onClick ={this.enterRoom}>Enter room</button>
       </Link>        
-      }</div> 
+      }
+      </div> 
     </div>
   );
 }
