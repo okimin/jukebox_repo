@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-// import Spotify from 'spotify-web-api-js';
 import "./App.css";
 import axios from "axios"
-// const SpotifyWebApi = new Spotify();
 class QueueComponent extends Component {
     _isMounted = false;
 
@@ -28,7 +26,6 @@ class QueueComponent extends Component {
 
     }
     componentDidUpdate(){
-        // this.getQueue();
 
     }
     componentWillUnmount(){
@@ -36,17 +33,14 @@ class QueueComponent extends Component {
         this.setState({songs:[]})
     }
     getQueue = () => {
-        // console.log(this.props);
 
         if(this._isMounted){
-        // var temp =[]
         axios.get("https://jukeberry-api.herokuapp.com/api/room-song",{
             params:{
                 room_code: this.props.room_code
             }
         })
         .then(res=>{
-            // console.log(res);
             var data= res.data
             this.setState({songs:data})
 
@@ -63,7 +57,6 @@ class QueueComponent extends Component {
             <div>
                 <div className="search-list">
                     <div className = "column"><h3>Song Title</h3></div>
-                    {/* <div className = "column"><h3>User </h3></div> */}
                 </div>
                 <div className="song-queue">
                     {this.state.songs.map((song,index) =>(

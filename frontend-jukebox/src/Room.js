@@ -7,14 +7,12 @@ import Search from "./Search";
 
 import QueueComponent from "./QueueComponent";
 import Guests from "./Guests"
-// import App from './App'
 import axios from "axios";
 import logo from "./images/JukeBoxLogo.png"
 // import { useHistory } from "react-router-dom";
 import Back from "./Back";
 
 const SpotifyWebApi = new Spotify();
-// const params = login.getToken()
 // 
 
 class Room extends Component {
@@ -22,9 +20,7 @@ class Room extends Component {
     constructor(props){
         super(props);
         
-        // const results = this.MakeRoom()     
-        // console.log(SpotifyWebApi.getAccessToken());   
-        // console.log(this.props.match.params);
+
         this.state={
 
             nowPlaying:{
@@ -37,11 +33,9 @@ class Room extends Component {
                 name:"hi",
                 inRoom:true,
                 profileImage:"",
-                // email:""
 
             },
             show: false,
-            // queueArray:[],
             songState:false,
             roomCode:this.props.match.params.id, //room code 
             token:"", // Accesstoken
@@ -84,8 +78,6 @@ class Room extends Component {
         //     };
         this._isMounted = false;
         this.setState({roomCode:""})
-        // this.setState({token:""})
-        // console.log("unmounted"
 
         axios.delete(`https://jukeberry-api.herokuapp.com/api/user`,{
             params:{
@@ -144,9 +136,7 @@ class Room extends Component {
     getItemsPlaying = () =>{        
         SpotifyWebApi.getMyCurrentPlayingTrack()
         .then((res) => { 
-            // console.log(res.context);
             if(this._isMounted && res.is_playing){
-            // console.log(res.item.uri,this.state.nowPlaying.playUri);
             if(res.item.uri!==this.state.nowPlaying.playUri 
                 && this.state.nowPlaying.playUri!=="")
             {
@@ -155,9 +145,7 @@ class Room extends Component {
                 if (this.state.songs.length>0){
                     
                     SpotifyWebApi.queue(this.state.songs[0].song_id)
-                    // while(res.item.uri === this.state.songs[0].song_id)
-                        // SpotifyWebApi.skipToNext();
-                        
+  
                     axios.delete('https://jukeberry-api.herokuapp.com/api/song',{
                     params:{
                         song_id:this.state.songs[0].song_id,
@@ -165,7 +153,6 @@ class Room extends Component {
                     }
                 })
                 .then(res=>{
-                    // console.log(res);
                     this.setState({songs:res.data})
                 })
                 SpotifyWebApi.skipToNext()
@@ -195,7 +182,6 @@ class Room extends Component {
         else{
             this.setState({searchButton:"Search Song"})
         }
-        // console.log(this.state.show)
     }
     showSearchResults =() => {
         if(this.state.show){
@@ -232,7 +218,6 @@ class Room extends Component {
             this.getItemsPlaying()
             this.setState({skipVote:0})
             this.setState({songState:true})
-            // console.log(this.state.songs)
             
         }
         else{
@@ -257,13 +242,11 @@ class Room extends Component {
         if(this._isMounted){
             SpotifyWebApi.getMe()
             .then(res=>{
-                // console.log(res)
                 if(this._isMounted){
                 this.setState({
                     user:{
                         name:res.display_name,
                         profileImage:res.images[0].url,
-                        // email:res.item.artists[0].name               
                     }                
                 })
                 }            
@@ -275,7 +258,6 @@ class Room extends Component {
         return(
             <React.Fragment>
                 <div className="room-css">
-                    {/* <Login/>                             */}
                     <div className='room-header'>
                     <div className="column-logo room-logo">       
                         <img src={logo} width="60px" alt="logo"/>
@@ -285,7 +267,6 @@ class Room extends Component {
                         <h4>Room Codes: {this.state.roomCode}</h4>
                     </div>
                     <Back username={this.state.username} roomCode={this.state.roomCode} guests={this.state.guests}></Back>
-                    {/* <button onClick={this.goBack}> Go Back</button> */}
                     </div>
         
                         <div className="currently-playing">
@@ -296,9 +277,7 @@ class Room extends Component {
                             <h2 className="current-text">{this.state.nowPlaying.playName}</h2>
                             <h4 className="current-text">{this.state.nowPlaying.playArtist}</h4>
                         </div>
-                        {/* <div></div> */}
                         <div className='controllers'>    
-                            {/* <button onClick={this.previousSong}> prev </button> */}
                             <button onClick={this.pauseSong}> {this.state.songState ? "pause" : "play"} </button>
                             <button onClick={this.nextSong}> Next </button>
                         </div>

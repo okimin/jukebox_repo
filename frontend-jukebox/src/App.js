@@ -15,7 +15,6 @@ class App extends Component {
       super(props);
       this.state={
         roomCode:"",
-        // roomIndex:0,
         roomMade: false,
         username:""
       }
@@ -39,12 +38,8 @@ class App extends Component {
       for ( var i = 0; i < 6; i++ ) {
          results += char.charAt(Math.floor(Math.random() * charactersLength));
       }
-      // console.log(results);
-      // console.log(params.length);
-      // console.log(refresh);
-      // console.log(params);
-      axios
-      .post('https://jukeberry-api.herokuapp.com/api/home', 
+
+      axios.post('https://jukeberry-api.herokuapp.com/api/home', 
       {
         code: results,
         host: results,
@@ -55,28 +50,9 @@ class App extends Component {
       })
       .then(
         res => {
-          // console.log("part1")
           this.setState({roomCode:results})
           this.setState({roomState:true})
 
-        //   axios.get("https://jukeberry-api.herokuapp.com/api/home")
-        // .then(res => {
-        //   var data = res.data
-        //   // console.log(this.state.roomCode)
-        //   for (var i=0;i<data.length;i++){
-        //     // console.log(data);
-        //     if(data[i].host.includes(this.state.roomCode)){
-        //       // console.log("Found room!",i)
-        //       // console.log(data[i].host)
-        //       data[i].guests.push(this.state.username)
-        //       console.log(data[i].guests);
-        //       return 
-        //     }
-        //     else{console.log("no");}
-        //   }
-        //   window.alert("Room was not found\n try again or maybe a different code")
-        //   // console.log("room not found")
-        // })
       })
       .then(()=>{ 
         console.log("success")
@@ -165,7 +141,6 @@ class App extends Component {
             />
         </form>
       <button onClick={this.makeRoom} className="btn makeRoom-btn">Make A Room</button>          
-      {/* <div className="options"> */}
         <form onSubmit={this.handleSubmit}>
           <label>Join Room</label><br/>
           <input 
@@ -179,16 +154,13 @@ class App extends Component {
             <button>Search for Room</button>          
         </form>
      
-      {/* </div>   */}
       <Login />  
       
       
       {this.state.roomState &&        
       <Link to={{
         pathname:`/Room/${this.state.roomCode}/${this.state.username}`,
-        // state:{
-        //   roomCode:true
-        // }
+
         }}
       >
         <button className="btn enter-btn" onClick ={this.enterRoom}>Enter room</button>
