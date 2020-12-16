@@ -48,8 +48,6 @@ class Search extends Component {
     render() {
         return (
             <div className="search-display">
-                {/* {this.getToken()} */}
-                {/* {this.getSearch()} */}
                 <form className="search-songs" onSubmit={this.getSearch}>
                     <label> Search Song </label>
                     <input 
@@ -62,7 +60,7 @@ class Search extends Component {
                     <input type="submit" id="search" className="btn btn-primary" value="Search" ></input>
 
                 </form>
-                    <OutputSearch results={this.state.searchArray} ></OutputSearch>
+                    <OutputSearch results={this.state.searchArray} room_code={this.props.room_code}></OutputSearch>
             </div>
         );
     }

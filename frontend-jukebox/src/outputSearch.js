@@ -25,19 +25,25 @@ class outputSearch extends Component {
     }
     addToQueue =(uri,name,artist,image)=>{
         // console.log(uri)
-        SpotifyWebApi.queue(uri);
+        
         console.log(uri,name,artist,image);
-        axios.post("https://jukeberry-api.herokuapp.com/api/song",
+        console.log(this.props.room_code);
+        console.log(name.length)
+        axios.post("https://jukeberry-api.herokuapp.com/api/song", 
         {
-            name:name,
-            song_id:uri,
-            song_pic:image,
-            artist_id:artist
+            
+                name:name,
+                song_id:uri,
+                song_pic:image,
+                artist_id:artist,
+                room_code:this.props.room_code
+            
         })
         .then(res=>{
             console.log("success");
         })
         .catch(err=>{console.error(err);})
+        // SpotifyWebApi.queue(uri);
     }
 
 

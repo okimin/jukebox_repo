@@ -14,14 +14,14 @@ class App extends Component {
     constructor(props){
       super(props);
       this.state={
-        roomCode:"#",
+        roomCode:"",
         // roomIndex:0,
         roomMade: false,
         username:""
       }
     }
     componentWillUnmount(){
-      this.setState({roomMade:"#"})
+      this.setState({roomMade:""})
     }
     makeRoom= () => { 
       if(this.state.username ===""){
@@ -33,15 +33,16 @@ class App extends Component {
         return;
       }
 
-      var results ='#'
+      var results =''
       var char ='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
       var charactersLength = char.length;
       for ( var i = 0; i < 6; i++ ) {
          results += char.charAt(Math.floor(Math.random() * charactersLength));
       }
-      console.log(results);
-      console.log(params.length);
-      console.log(refresh);
+      // console.log(results);
+      // console.log(params.length);
+      // console.log(refresh);
+      // console.log(params);
       axios
       .post('https://jukeberry-api.herokuapp.com/api/home', 
       {
@@ -54,32 +55,32 @@ class App extends Component {
       })
       .then(
         res => {
-          console.log("part1")
+          // console.log("part1")
           this.setState({roomCode:results})
-          axios.get("https://jukeberry-api.herokuapp.com/api/home")
-        .then(res => {
-          var data = res.data
-          // console.log(this.state.roomCode)
-          for (var i=0;i<data.length;i++){
-            // console.log(data);
-            if(data[i].host.includes(this.state.roomCode)){
-              // console.log("Found room!",i)
-              this.setState({roomState:true})
-              // console.log(data[i].host)
-              data[i].guests.push(this.state.username)
-              console.log(data[i].guests);
-              return 
-            }
-            else{console.log("no");}
-          }
-          window.alert("Room was not found\n try again or maybe a different code")
-          // console.log("room not found")
-        })
-      }
-      )
+          this.setState({roomState:true})
+
+        //   axios.get("https://jukeberry-api.herokuapp.com/api/home")
+        // .then(res => {
+        //   var data = res.data
+        //   // console.log(this.state.roomCode)
+        //   for (var i=0;i<data.length;i++){
+        //     // console.log(data);
+        //     if(data[i].host.includes(this.state.roomCode)){
+        //       // console.log("Found room!",i)
+        //       // console.log(data[i].host)
+        //       data[i].guests.push(this.state.username)
+        //       console.log(data[i].guests);
+        //       return 
+        //     }
+        //     else{console.log("no");}
+        //   }
+        //   window.alert("Room was not found\n try again or maybe a different code")
+        //   // console.log("room not found")
+        // })
+      })
       .then(()=>{ 
         console.log("success")
-        window.location.href=`/Room/${this.state.roomCode}`
+        window.location.href=`/Room/${this.state.roomCode}/${this.state.username}`
       }
       )
       .catch(err=>console.error(err))
@@ -103,48 +104,42 @@ class App extends Component {
       // Make a GET request to enter that shit
       // start adding songs!
       if(this.state.username !==""){
-        
-        axios.get("https://jukeberry-api.herokuapp.com/api/home")
-        .then(res => {
-          var data = res.data
-          for (var i=0;i<data.length;i++){
-            //SEARCHES FOR ROOM 
-            if(data[i].code.includes(this.state.roomCode)){
-              // console.log("Found room!",i)
-              this.setState({roomState:true})
-              // console.log(data[i].host)
-              // data[i].guests.push(this.state.username)
-              if(!this.state.roomMade){
-                //Adding User
-                axios.post("https://jukeberry-api.herokuapp.com/api/user",{
-                  room_code:this.state.roomCode,
-                  name:this.state.username,
-                  songs_added: 0
-                })
-                .then(res=>{
-                  console.log(res);
-                })
-                .catch(err =>{console.error(err);})
-                console.log("Adding user to room");
-                axios.post("https://jukeberry-api.herokuapp.com/api/adduser",{
-                name:this.state.username,
-                songs_added: 0,
-                room_code:this.state.roomCode
-                })
-                .then(res=> console.log(res))
-                .catch(err=> console.error(err))
-              }
-              // console.log(data[i].guests);
-              return 
+        axios.get('https://jukeberry-api.herokuapp.com/api/viewroom',{
+            params:{
+                code:this.state.roomCode
             }
-            // else{console.log("no");}
-          }
-          window.alert("Room was not found\n try again or maybe a different code")
-          // console.log("room not found")
         })
-      }
+        .then(()=>{
+          //Adding User
+          
+          axios.post("https://jukeberry-api.herokuapp.com/api/user",{
+            room_code:this.state.roomCode,
+            name:this.state.username,
+            songs_added: 0
+          })
+          .then(res=>{
+            console.log(res);
+          })
+          .catch(err =>{console.error(err);})
+          
+          console.log("Adding user to room");
+          
+          axios.post("https://jukeberry-api.herokuapp.com/api/adduser",{
+          name:this.state.username,
+          songs_added: 0,
+          room_code:this.state.roomCode
+          })
+          .then(res=> console.log(res))
+          .catch(err=> console.error(err))
+        
+          this.setState({roomState:!this.state.roomState})
+        })
+        .catch(()=>{
+          window.alert("Room was not found\n try again or maybe a different code")
+        })
+        }
       else{
-        window.alert("enter username")
+        window.alert("Enter username")
       }
     }
   handleUserName =(e)=>{
@@ -187,8 +182,15 @@ class App extends Component {
       {/* </div>   */}
       <Login />  
       
+      
       {this.state.roomState &&        
-      <Link to={`/Room/${this.state.roomCode}`}>
+      <Link to={{
+        pathname:`/Room/${this.state.roomCode}/${this.state.username}`,
+        // state:{
+        //   roomCode:true
+        // }
+        }}
+      >
         <button className="btn enter-btn" onClick ={this.enterRoom}>Enter room</button>
       </Link>        
       }

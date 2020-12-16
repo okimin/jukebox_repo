@@ -10,8 +10,8 @@ export default ()=>(
             <Route exact path="/" component={Main}/>
             <Route path="/Main" component={Main} />
             <Route exact path ="/Room" component={Room}/>
-            <Route path ="/Room/:id" component={Room}/>
+            <Route exact path ="/Room/:id" component={Room}/>
+            <Route path ="/Room/:id/:user" component={Room}/>
             <Route path ="/User" component={User}/>
-        </Switch>
-    
+        </Switch>    
 );

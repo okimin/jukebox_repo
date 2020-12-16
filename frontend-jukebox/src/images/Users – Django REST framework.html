@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)https://jukeberry-api.herokuapp.com/api/users -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+
+      
+        
+        <meta name="robots" content="NONE,NOARCHIVE">
+      
+
+      <title>Users – Django REST framework</title>
+
+      
+        
+          <link rel="stylesheet" type="text/css" href="./Users – Django REST framework_files/bootstrap.min.css">
+          <link rel="stylesheet" type="text/css" href="./Users – Django REST framework_files/bootstrap-tweaks.css">
+        
+
+        <link rel="stylesheet" type="text/css" href="./Users – Django REST framework_files/prettify.css">
+        <link rel="stylesheet" type="text/css" href="./Users – Django REST framework_files/default.css">
+        <style>.highlight .hll { background-color: #ffffcc }
+.highlight  { background: #f8f8f8; }
+.highlight .c { color: #008800; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #AA22FF; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .ch { color: #008800; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #008800; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #008800 } /* Comment.Preproc */
+.highlight .cpf { color: #008800; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #008800; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #008800; font-weight: bold } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0044DD } /* Generic.Traceback */
+.highlight .kc { color: #AA22FF; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #AA22FF; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #AA22FF; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #AA22FF } /* Keyword.Pseudo */
+.highlight .kr { color: #AA22FF; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #00BB00; font-weight: bold } /* Keyword.Type */
+.highlight .m { color: #666666 } /* Literal.Number */
+.highlight .s { color: #BB4444 } /* Literal.String */
+.highlight .na { color: #BB4444 } /* Name.Attribute */
+.highlight .nb { color: #AA22FF } /* Name.Builtin */
+.highlight .nc { color: #0000FF } /* Name.Class */
+.highlight .no { color: #880000 } /* Name.Constant */
+.highlight .nd { color: #AA22FF } /* Name.Decorator */
+.highlight .ni { color: #999999; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #00A000 } /* Name.Function */
+.highlight .nl { color: #A0A000 } /* Name.Label */
+.highlight .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #B8860B } /* Name.Variable */
+.highlight .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #666666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666666 } /* Literal.Number.Float */
+.highlight .mh { color: #666666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BB4444 } /* Literal.String.Affix */
+.highlight .sb { color: #BB4444 } /* Literal.String.Backtick */
+.highlight .sc { color: #BB4444 } /* Literal.String.Char */
+.highlight .dl { color: #BB4444 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BB4444; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BB4444 } /* Literal.String.Double */
+.highlight .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BB4444 } /* Literal.String.Heredoc */
+.highlight .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #BB6688 } /* Literal.String.Regex */
+.highlight .s1 { color: #BB4444 } /* Literal.String.Single */
+.highlight .ss { color: #B8860B } /* Literal.String.Symbol */
+.highlight .bp { color: #AA22FF } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #00A000 } /* Name.Function.Magic */
+.highlight .vc { color: #B8860B } /* Name.Variable.Class */
+.highlight .vg { color: #B8860B } /* Name.Variable.Global */
+.highlight .vi { color: #B8860B } /* Name.Variable.Instance */
+.highlight .vm { color: #B8860B } /* Name.Variable.Magic */
+.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style>
+      
+
+    
+  </head>
+
+  
+  <body class="" data-new-gr-c-s-check-loaded="14.987.0" data-gr-ext-installed="">
+
+    <div class="wrapper">
+      
+        <div class="navbar navbar-static-top navbar-inverse" role="navigation" aria-label="navbar">
+          <div class="container">
+            <span>
+              
+                <a class="navbar-brand" rel="nofollow" href="https://www.django-rest-framework.org/">
+                    Django REST framework
+                </a>
+              
+            </span>
+            <ul class="nav navbar-nav pull-right">
+              
+                
+                  
+                
+              
+            </ul>
+          </div>
+        </div>
+      
+
+      <div class="container">
+        
+          <ul class="breadcrumb">
+            
+              
+                <li class="active"><a href="https://jukeberry-api.herokuapp.com/api/users">Users</a></li>
+              
+            
+          </ul>
+        
+
+        <!-- Content -->
+        <div id="content" role="main" aria-label="content">
+          
+
+          <div class="region" aria-label="request form">
+          
+          
+          
+            <form id="get-form" class="pull-right">
+              <fieldset>
+                
+                  <div class="btn-group format-selection">
+                    <a class="btn btn-primary js-tooltip" href="https://jukeberry-api.herokuapp.com/api/users" rel="nofollow" title="Make a GET request on the Users resource">GET</a>
+
+                    <button class="btn btn-primary dropdown-toggle js-tooltip" data-toggle="dropdown" title="Specify a format for the GET request">
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                      
+                        <li>
+                          <a class="js-tooltip format-option" href="https://jukeberry-api.herokuapp.com/api/users?format=json" rel="nofollow" title="Make a GET request on the Users resource with the format set to `json`">json</a>
+                        </li>
+                      
+                        <li>
+                          <a class="js-tooltip format-option" href="https://jukeberry-api.herokuapp.com/api/users?format=api" rel="nofollow" title="Make a GET request on the Users resource with the format set to `api`">api</a>
+                        </li>
+                      
+                    </ul>
+                  </div>
+                
+              </fieldset>
+            </form>
+          
+
+          
+            <form class="button-form" action="https://jukeberry-api.herokuapp.com/api/users" data-method="OPTIONS">
+              <button class="btn btn-primary js-tooltip" title="Make an OPTIONS request on the Users resource">OPTIONS</button>
+            </form>
+          
+
+          
+
+          
+
+          
+
+          
+          </div>
+
+            <div class="content-main" role="main" aria-label="main content">
+              <div class="page-header">
+                <h1>Users</h1>
+              </div>
+              <div style="float:left">
+                
+                  <p></p>
+                
+              </div>
+
+              
+
+              <div class="request-info" style="clear: both" aria-label="request info">
+                <pre class="prettyprint"><b>GET</b> /api/users</pre>
+              </div>
+
+              <div class="response-info" aria-label="response info">
+                <pre class="prettyprint"><span class="meta nocode"><b>HTTP 200 OK</b>
+<b>Allow:</b> <span class="lit">GET, POST, HEAD, OPTIONS</span>
+<b>Content-Type:</b> <span class="lit">application/json</span>
+<b>Vary:</b> <span class="lit">Accept</span>
+
+</span>[
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "#9EER5Y"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "#9EER5Y"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "#9EER5Y"
+    },
+    {
+        "name": "ME",
+        "songs_added": 0,
+        "room_code": "TEST"
+    },
+    {
+        "name": "opbackend",
+        "songs_added": 0,
+        "room_code": "#HHY8LO"
+    },
+    {
+        "name": "opbackend",
+        "songs_added": 0,
+        "room_code": "#HHY8LO"
+    },
+    {
+        "name": "Opsm",
+        "songs_added": 0,
+        "room_code": "#HHY8LO"
+    },
+    {
+        "name": "Opsm",
+        "songs_added": 0,
+        "room_code": "#HHY8LO"
+    },
+    {
+        "name": "Opsm",
+        "songs_added": 0,
+        "room_code": "#HHY8LO"
+    },
+    {
+        "name": "Opsm",
+        "songs_added": 0,
+        "room_code": "#HHY8LO"
+    },
+    {
+        "name": "Opsm",
+        "songs_added": 0,
+        "room_code": "#HHY8LO"
+    },
+    {
+        "name": "Ostabo R Palacios",
+        "songs_added": 0,
+        "room_code": "#HHY8LO"
+    },
+    {
+        "name": "opbackend",
+        "songs_added": 0,
+        "room_code": "#HHY8LO"
+    },
+    {
+        "name": "opbackend",
+        "songs_added": 0,
+        "room_code": "#HHY8LO"
+    },
+    {
+        "name": "Opsm",
+        "songs_added": 0,
+        "room_code": "#HHY8LO"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "#7SZKXS"
+    },
+    {
+        "name": "opGuest1",
+        "songs_added": 0,
+        "room_code": "#7SZKXS"
+    },
+    {
+        "name": "opGuest2",
+        "songs_added": 0,
+        "room_code": "#7SZKXS"
+    },
+    {
+        "name": "Opsm",
+        "songs_added": 0,
+        "room_code": "#HHY8LO"
+    },
+    {
+        "name": "Opsm",
+        "songs_added": 0,
+        "room_code": "#HHY8LO"
+    },
+    {
+        "name": "Opsm",
+        "songs_added": 0,
+        "room_code": "#HHY8LO"
+    },
+    {
+        "name": "Alex",
+        "songs_added": 0,
+        "room_code": "TEST"
+    },
+    {
+        "name": "DAN",
+        "songs_added": 0,
+        "room_code": "TEST"
+    },
+    {
+        "name": "HELPME",
+        "songs_added": 0,
+        "room_code": "TEST"
+    },
+    {
+        "name": "FUCK",
+        "songs_added": 0,
+        "room_code": "TEST"
+    },
+    {
+        "name": "ME",
+        "songs_added": 0,
+        "room_code": "TEST"
+    },
+    {
+        "name": "Oki",
+        "songs_added": 0,
+        "room_code": "2UZ7G2"
+    },
+    {
+        "name": "Oki",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "Oki",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "Oki",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "Oki",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "Oki",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "Oki",
+        "songs_added": 0,
+        "room_code": "FZF679"
+    },
+    {
+        "name": "Oki",
+        "songs_added": 0,
+        "room_code": "FZF679"
+    },
+    {
+        "name": "Oki",
+        "songs_added": 0,
+        "room_code": "FZF679"
+    },
+    {
+        "name": "Oki",
+        "songs_added": 0,
+        "room_code": "FZF679"
+    },
+    {
+        "name": "opHost",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opHost",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opHost",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opHost",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opHost",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opHost",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "opGuest",
+        "songs_added": 0,
+        "room_code": "0DM6H7"
+    },
+    {
+        "name": "opGuest1",
+        "songs_added": 0,
+        "room_code": "0DM6H7"
+    },
+    {
+        "name": "opHost",
+        "songs_added": 0,
+        "room_code": "T6ZLAL"
+    },
+    {
+        "name": "Opsm",
+        "songs_added": 0,
+        "room_code": "#HHY8LO"
+    },
+    {
+        "name": "Opsm",
+        "songs_added": 0,
+        "room_code": "#HHY8LO"
+    }
+]</pre>
+              </div>
+            </div>
+
+            
+              
+                <div class="tabbable">
+                  
+                    <ul class="nav nav-tabs form-switcher">
+                      <li>
+                        <a name="html-tab" href="https://jukeberry-api.herokuapp.com/api/users#post-object-form" data-toggle="tab">HTML form</a>
+                      </li>
+                      <li>
+                        <a name="raw-tab" href="https://jukeberry-api.herokuapp.com/api/users#post-generic-content-form" data-toggle="tab">Raw data</a>
+                      </li>
+                    </ul>
+                  
+
+                  <div class="well tab-content">
+                    
+                      <div class="tab-pane" id="post-object-form">
+                        
+                          <form action="https://jukeberry-api.herokuapp.com/api/users" method="POST" enctype="multipart/form-data" class="form-horizontal" novalidate="">
+                            <fieldset>
+                              <input type="hidden" name="csrfmiddlewaretoken" value="UvIfeU2s5m1WMqBSPXMvTPpFsH82BdFSyKZZA7ynIyaNpRVcCQM1oH9gLSqHxbW0">
+                              
+
+  
+    <div class="form-group ">
+  
+    <label class="col-sm-2 control-label ">
+      Name
+    </label>
+  
+
+  <div class="col-sm-10">
+    <input name="name" class="form-control" type="text" value="">
+
+    
+
+    
+  </div>
+</div>
+
+  
+
+  
+    <div class="form-group ">
+  
+    <label class="col-sm-2 control-label ">
+      Songs added
+    </label>
+  
+
+  <div class="col-sm-10">
+    <input name="songs_added" class="form-control" type="number" value="">
+
+    
+
+    
+  </div>
+</div>
+
+  
+
+  
+    <div class="form-group ">
+  
+    <label class="col-sm-2 control-label ">
+      Room code
+    </label>
+  
+
+  <div class="col-sm-10">
+    <input name="room_code" class="form-control" type="text" value="">
+
+    
+
+    
+  </div>
+</div>
+
+  
+
+
+                              <div class="form-actions">
+                                <button class="btn btn-primary js-tooltip" title="Make a POST request on the Users resource">POST</button>
+                              </div>
+                            </fieldset>
+                          </form>
+                        
+                      </div>
+                    
+
+                    <div class="tab-pane" id="post-generic-content-form">
+                      
+                        <form action="https://jukeberry-api.herokuapp.com/api/users" method="POST" class="form-horizontal">
+                          <fieldset>
+                            
+
+
+  <div class="form-group">
+    <label for="id__content_type" class="col-sm-2 control-label">Media type:</label>
+    <div class="col-sm-10">
+      <select name="_content_type" data-override="content-type" id="id__content_type" class="form-control">
+  <option value="application/json" selected="">application/json</option>
+
+  <option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
+
+  <option value="multipart/form-data">multipart/form-data</option>
+
+</select>
+      <span class="help-block"></span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="id__content" class="col-sm-2 control-label">Content:</label>
+    <div class="col-sm-10">
+      <textarea name="_content" cols="40" rows="10" data-override="content" id="id__content" class="form-control">{
+    "name": "",
+    "songs_added": null,
+    "room_code": ""
+}</textarea>
+      <span class="help-block"></span>
+    </div>
+  </div>
+
+
+                            <div class="form-actions">
+                              <button class="btn btn-primary js-tooltip" title="Make a POST request on the Users resource">POST</button>
+                            </div>
+                          </fieldset>
+                        </form>
+                      
+                    </div>
+                  </div>
+                </div>
+              
+
+              
+            
+          
+        </div><!-- /.content -->
+      </div><!-- /.container -->
+    </div><!-- ./wrapper -->
+
+    
+
+    
+      <script>
+        window.drf = {
+          csrfHeaderName: "X-CSRFTOKEN",
+          csrfToken: "UvIfeU2s5m1WMqBSPXMvTPpFsH82BdFSyKZZA7ynIyaNpRVcCQM1oH9gLSqHxbW0"
+        };
+      </script>
+      <script src="./Users – Django REST framework_files/jquery-3.4.1.min.js.download"></script>
+      <script src="./Users – Django REST framework_files/ajax-form.js.download"></script>
+      <script src="./Users – Django REST framework_files/csrf.js.download"></script>
+      <script src="./Users – Django REST framework_files/bootstrap.min.js.download"></script>
+      <script src="./Users – Django REST framework_files/prettify-min.js.download"></script>
+      <script src="./Users – Django REST framework_files/default.js.download"></script>
+      <script>
+        $(document).ready(function() {
+          $('form').ajaxForm();
+        });
+      </script>
+    
+
+  
+  
+
+</body></html>

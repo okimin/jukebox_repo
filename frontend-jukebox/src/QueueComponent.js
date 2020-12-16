@@ -4,8 +4,12 @@ import "./App.css";
 import axios from "axios"
 // const SpotifyWebApi = new Spotify();
 class QueueComponent extends Component {
+    _isMounted = false;
+
     constructor(props){
+
         super();
+        // console.log(props.roomCode);
         this.state={
             songs :[],
             song:{
@@ -18,21 +22,41 @@ class QueueComponent extends Component {
 
     }
     componentDidMount(){
+        this._isMounted=true
         this.getQueue();
-        setInterval(this.getQueue,2000);
+        setInterval(this.getQueue,5000);
 
     }
     componentDidUpdate(){
         // this.getQueue();
+
+    }
+    componentWillUnmount(){
+        this._isMounted=false;
+        this.setState({songs:[]})
     }
     getQueue = () => {
-        axios.get("https://jukeberry-api.herokuapp.com/api/songs")
+        // console.log(this.props);
+
+        if(this._isMounted){
+        // var temp =[]
+        axios.get("https://jukeberry-api.herokuapp.com/api/room-song",{
+            params:{
+                room_code: this.props.room_code
+            }
+        })
         .then(res=>{
-            console.log(res);
+            // console.log(res);
             var data= res.data
             this.setState({songs:data})
+
+            this.props.update(data)
+
         })
-        .catch(err=>{console.error(err);})
+        .catch(err=>{
+            this.setState({songs:[]})
+        })
+        }
     }
     render() {
         return (
@@ -53,12 +77,7 @@ class QueueComponent extends Component {
                         </div>
                     ))}
                 </div>
-                    {/* <div className = "column">
-                        {/* <button className="add-song"> vote  song </button> }
-                    </div> */}
-                {/* {this.props.queueArray.map(QA=>(
-                    <div>hi</div>
-                ))} */}
+                    
             </div>
         );
     }

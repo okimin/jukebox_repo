@@ -6,11 +6,13 @@ import Spotify from "spotify-web-api-js";
 import Search from "./Search";
 
 import QueueComponent from "./QueueComponent";
+import Guests from "./Guests"
 // import App from './App'
 import axios from "axios";
 import logo from "./images/JukeBoxLogo.png"
 // import { useHistory } from "react-router-dom";
 import Back from "./Back";
+
 const SpotifyWebApi = new Spotify();
 // const params = login.getToken()
 // 
@@ -22,12 +24,14 @@ class Room extends Component {
         
         // const results = this.MakeRoom()     
         // console.log(SpotifyWebApi.getAccessToken());   
+        // console.log(this.props.match.params);
         this.state={
 
             nowPlaying:{
-                playName: 'not checked',
+                playName: 'start your device',
                 playImage:'',
-                playArtist:''
+                playArtist:'',
+                playUri:''
             },
             user:{
                 name:"hi",
@@ -37,14 +41,15 @@ class Room extends Component {
 
             },
             show: false,
-            queueArray:[],
-            songState:true,
-            roomCode:"", //room code 
+            // queueArray:[],
+            songState:false,
+            roomCode:this.props.match.params.id, //room code 
             token:"", // Accesstoken
-            username:"",
-            guests:[],
+            username:this.props.match.params.user,
             searchButton:"Search Song",
-            skipVote:0
+            skipVote:0,
+            guests:[],
+            songs:[]
         }
 
         // this.getNowPlaying = this.getNowPlaying.bind(this);
@@ -54,41 +59,43 @@ class Room extends Component {
         this.nextSong =this.nextSong.bind(this)
         this.previousSong =this.previousSong.bind(this);
         this.pauseSong =this.pauseSong.bind(this);
-        this.makePlaylist = this.makePlaylist.bind(this)
+        this.makePlaylist = this.makePlaylist.bind(this);
     }
    
     componentDidMount(){
-        // SpotifyWebApi.setAccessToken(params);
         this._isMounted = true
-        this.getItemsPlaying();
-        this.getUser();
         this.getRoom();
+        this.getItemsPlaying();        
         this.makePlaylist();
+
+        setInterval(this.getRoom,2000);
         setInterval(this.getItemsPlaying,2000);
         setInterval(this.getUser,2000);
-        setInterval(this.getRoom,2000);
         setInterval(this.makePlaylist,2000)
-        // var temptoken = SpotifyWebApi.getAccessToken();
-        // console.log(temptoken);
 
     }
     componentDidUpdate(){
-
     }
     componentWillUnmount(){
+        // window.onbeforeunload = (e) => {
+        //     this.setState({
+        //         nowPlaying:{
+        //             playuri:this.state.nowPlaying.playUri}})
+        //     };
         this._isMounted = false;
         this.setState({roomCode:""})
-        this.setState({token:""})
+        // this.setState({token:""})
         // console.log("unmounted"
 
-        axios.delete(
-            `https://jukeberry-api.herokuapp.com/api/user
-            ${this.state.roomCode}/${this.state.username}/delete`
-            )
-            .then(res =>{
-                console.log(res)
-            })
-            .catch(err=>console.error(err))
+        axios.delete(`https://jukeberry-api.herokuapp.com/api/user`,{
+            params:{
+                room_code:this.state.roomCode,
+                name:this.state.username,
+               
+            }
+        })
+        .then(res=>{console.log(res);})
+        .catch(err=>console.error(err))
         this.setState({username:""})
         // this.setState({guests:tempGuest})
     }
@@ -100,32 +107,24 @@ class Room extends Component {
     }
     //GETS ALL THE INFORMATION FROM THE ROOM USING THE ROOM CODE TO  
     getRoom = () => {
-        // console.log(match.params.roomCode);
-        var codeLink = this.getHashURLCode();
-        axios.get('https://jukeberry-api.herokuapp.com/api/home')
-        .then(res=>{
-            if(this._isMounted && codeLink!==""){
-                var roomInfo = res.data  
-                // console.log(roomInfo)
-                for(var i=0; i<roomInfo.length;i++){
-                    if(roomInfo[i].code.includes(codeLink)){
-                        this.setState({token:roomInfo[i].access_token})
-                        // console.log(roomInfo[i])
-                        var tempGuest = roomInfo[i].guests
-                        if(tempGuest.length <= 0){
-                            this.setState({username: roomInfo[i].host_name})                            
-                        }
-                        else{
-                            this.setState({guests: tempGuest})
-                            this.setState({username: tempGuest[tempGuest.length-1]})
-                        }
-                        SpotifyWebApi.setAccessToken(roomInfo[i].access_token)
-                        this.setState({roomCode: roomInfo[i].code})
-                    }
-                }         
+        // gets the token from the backend and connects spotify 
+        SpotifyWebApi.setAccessToken(this.state.token)
+
+        axios.get('https://jukeberry-api.herokuapp.com/api/viewroom',{
+            params:{
+                room_code:this.state.roomCode
             }
         })
+        .then(res=>{
+            if(this._isMounted){
+                var roomInfo = res.data  
+                this.setState({token:roomInfo.access_token})       
+        }
+        })
         .catch(err=>console.error(err))
+    }
+    loadSpotify=()=>{
+        SpotifyWebApi.setAccessToken(this.state.token)
     }
     makePlaylist=()=>{
         // console.log("here")
@@ -145,18 +144,46 @@ class Room extends Component {
     getItemsPlaying = () =>{        
         SpotifyWebApi.getMyCurrentPlayingTrack()
         .then((res) => { 
-            if(this._isMounted){
-                // console.log(res)
-                //RETRIEVES NAME, IMAGE AND ARTST FOR PARAMETERS
+            // console.log(res.context);
+            if(this._isMounted && res.is_playing){
+            // console.log(res.item.uri,this.state.nowPlaying.playUri);
+            if(res.item.uri!==this.state.nowPlaying.playUri 
+                && this.state.nowPlaying.playUri!=="")
+            {
+
+                SpotifyWebApi.pause();
+                if (this.state.songs.length>0){
+                    
+                    SpotifyWebApi.queue(this.state.songs[0].song_id)
+                    // while(res.item.uri === this.state.songs[0].song_id)
+                        // SpotifyWebApi.skipToNext();
+                        
+                    axios.delete('https://jukeberry-api.herokuapp.com/api/song',{
+                    params:{
+                        song_id:this.state.songs[0].song_id,
+                        room_code:this.state.songs[0].room_code
+                    }
+                })
+                .then(res=>{
+                    // console.log(res);
+                    this.setState({songs:res.data})
+                })
+                SpotifyWebApi.skipToNext()
+                .then(res=>{console.log(res);})
+                }
+                SpotifyWebApi.play();
+            }
             this.setState({
                 nowPlaying:{
                     playName:res.item.name,
                     playImage:res.item.album.images[0].url,
-                    playArtist:res.item.artists[0].name                   
-                }
+                    playArtist:res.item.artists[0].name,
+                    playUri:res.item.uri                   
+                },
+                songState:true
             })
-            
             }
+            else{this.setState({songState:false})}
         })
         .catch(e=>{console.log(e)})
     }
@@ -173,17 +200,40 @@ class Room extends Component {
     showSearchResults =() => {
         if(this.state.show){
             return(
-                <Search access_token ={this.state.token}/>
+                <Search access_token ={this.state.token} room_code={this.state.roomCode}/>
             )
         }
+    }
+    updateSongs=(songArray)=>{
+        this.setState({songs:songArray})
+    }
+    updateGuests=(guestArray)=>{
+        this.setState({guests:guestArray})
     }
     //TOGGLE AND MODIFY SONG/QUEUE 
     //modifies the skip song feature
     nextSong = () => {
-        if(this.state.skipVote > this.state.guests.length/2-1){ 
-            SpotifyWebApi.skipToNext()
+        SpotifyWebApi.skipToNext()
+        if(this.state.skipVote > this.state.guests.length/2-1){
+        if (this.state.songs.length>0){
+            SpotifyWebApi.queue(this.state.songs[0].song_id)
+            axios.delete('https://jukeberry-api.herokuapp.com/api/song',{
+            params:{
+                song_id:this.state.songs[0].song_id,
+                room_code:this.state.songs[0].room_code
+            }
+        })
+        .then(res=>{
+            console.log(res);
+            this.setState({songs:res.data})
+        })
+    }
+            
             this.getItemsPlaying()
             this.setState({skipVote:0})
+            this.setState({songState:true})
+            // console.log(this.state.songs)
+            
         }
         else{
             this.setState({skipVote:this.state.skipVote+1})
@@ -249,29 +299,31 @@ class Room extends Component {
                         {/* <div></div> */}
                         <div className='controllers'>    
                             {/* <button onClick={this.previousSong}> prev </button> */}
-                            <button onClick={this.pauseSong}> Pause </button>
+                            <button onClick={this.pauseSong}> {this.state.songState ? "pause" : "play"} </button>
                             <button onClick={this.nextSong}> Next </button>
                         </div>
                         <button onClick={()=>this.SearchSongButton()}>{this.state.searchButton}</button>
+                        <h4>Votes to skip current song: {this.state.skipVote} / {this.state.guests.length}</h4>
                         <div className="container">
-        <h4>Votes to skip current song: {this.state.skipVote} / {this.state.guests.length}</h4>
                             {this.showSearchResults()}
                             <div className="users-tab">
                               Host:  <img src={this.state.user.profileImage} alt="host" className ="user-profile"/>
                               <br/>
                               You: {this.state.username}
                               <br/>
-                              Guests:
-                              {this.state.guests.map((guest,index)=>(
-                                <div key={index}>{guest}</div> 
-                              ))}
-                              {/* <div>
-                                  <ul>
-                                      <li></li>
-                                  </ul>
-                              </div> */}
+                        
+                            <Guests 
+                                skipVote={this.state.skipVote} 
+                                guests={this.state.guests} 
+                                update={this.updateGuests.bind(this)}
+                            />
                             </div>
-                            <QueueComponent access_token ={this.state.token}></QueueComponent>
+                            <QueueComponent 
+                                access_token ={this.state.token} 
+                                songs={this.state.songs} 
+                                room_code={this.state.roomCode} 
+                                update={this.updateSongs.bind(this)}/>
+
                         </div>
                     </div>                 
                 </div>

@@ -20,6 +20,10 @@ class Login extends Component {
         }        
     };
 
+    componentDidMount(){
+
+    }
+    
     checkLogin(){        
         return this.token? true: false
     }
@@ -40,7 +44,7 @@ class Login extends Component {
            hashParams[e[1]] = decodeURIComponent(e[2]);
            e = r.exec(q)
         }
-        this.setState({loggedIn: true})
+        // this.setState({loggedIn: true})
         // console.log(this.state.loggedIn)
         return hashParams;
     }
