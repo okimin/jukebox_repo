@@ -47,18 +47,14 @@ class App extends Component {
         access_token: params,
         host_name:this.state.username,
         refresh_token:refresh
-      })
-      .then(
+      }).then(
         res => {
+          console.log(res);
           this.setState({roomCode:results})
           this.setState({roomState:true})
-
+          console.log("success")
+          window.location.href=`/Room/${this.state.roomCode}/${this.state.username}`
       })
-      .then(()=>{ 
-        console.log("success")
-        window.location.href=`/Room/${this.state.roomCode}/${this.state.username}`
-      }
-      )
       .catch(err=>console.error(err))
       
     }
@@ -82,12 +78,12 @@ class App extends Component {
       if(this.state.username !==""){
         axios.get('https://jukeberry-api.herokuapp.com/api/viewroom',{
             params:{
-                code:this.state.roomCode
+                room_code:this.state.roomCode
             }
         })
         .then(()=>{
           //Adding User
-          
+          console.log("adding users");
           axios.post("https://jukeberry-api.herokuapp.com/api/user",{
             room_code:this.state.roomCode,
             name:this.state.username,
@@ -100,13 +96,13 @@ class App extends Component {
           
           console.log("Adding user to room");
           
-          axios.post("https://jukeberry-api.herokuapp.com/api/adduser",{
-          name:this.state.username,
-          songs_added: 0,
-          room_code:this.state.roomCode
-          })
-          .then(res=> console.log(res))
-          .catch(err=> console.error(err))
+          // axios.post("https://jukeberry-api.herokuapp.com/api/adduser",{
+          // name:this.state.username,
+          // songs_added: 0,
+          // room_code:this.state.roomCode
+          // })
+          // .then(res=> console.log(res))
+          // .catch(err=> console.error(err))
         
           this.setState({roomState:!this.state.roomState})
         })

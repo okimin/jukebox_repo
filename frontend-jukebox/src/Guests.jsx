@@ -8,12 +8,19 @@ class Guests extends Component {
         super(props);
         this.state={guests:[],}
 
+        this.getGuests= this.getGuests.bind(this)
     }
 
     componentDidMount() {
+        this.getGuests()
+        setInterval(this.getGuests(),2000);
+    }
+
+    getGuests=()=>{
+        console.log(this.props.room_code);
         axios.get(`https://jukeberry-api.herokuapp.com/api/usersinroom`,{
             params:{
-                room_code:this.state.roomCode
+                room_code:this.props.room_code
             }
         })
         .then(res=>{
@@ -25,7 +32,6 @@ class Guests extends Component {
             this.props.update(temp)
         })
     }
-
     componentWillUnmount() {
         
     }
@@ -33,7 +39,6 @@ class Guests extends Component {
     render() {
         return (
             <div>
-{/* <div>Votes to skip next song</div> */}
                  Guests:
                 {this.state.guests.map((guest,index)=>(
                                 <div key={index}>{guest}</div> 

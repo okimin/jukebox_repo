@@ -156,6 +156,7 @@ class Room extends Component {
                     this.setState({songs:res.data})
                 })
                 SpotifyWebApi.skipToNext()
+                SpotifyWebApi.play()
                 .then(res=>{console.log(res);})
                 }
                 SpotifyWebApi.play();
@@ -199,26 +200,25 @@ class Room extends Component {
     //TOGGLE AND MODIFY SONG/QUEUE 
     //modifies the skip song feature
     nextSong = () => {
-        SpotifyWebApi.skipToNext()
+        console.log(this.state.guests)
         if(this.state.skipVote > this.state.guests.length/2-1){
-        if (this.state.songs.length>0){
-            SpotifyWebApi.queue(this.state.songs[0].song_id)
-            axios.delete('https://jukeberry-api.herokuapp.com/api/song',{
-            params:{
-                song_id:this.state.songs[0].song_id,
-                room_code:this.state.songs[0].room_code
-            }
-        })
-        .then(res=>{
-            console.log(res);
-            this.setState({songs:res.data})
-        })
-    }
-            
-            this.getItemsPlaying()
-            this.setState({skipVote:0})
-            this.setState({songState:true})
-            
+            if (this.state.songs.length>0){
+                SpotifyWebApi.queue(this.state.songs[0].song_id)
+                axios.delete('https://jukeberry-api.herokuapp.com/api/song',{
+                params:{
+                    song_id:this.state.songs[0].song_id,
+                    room_code:this.state.songs[0].room_code
+                }
+                })
+                .then(res=>{
+                this.setState({songs:res.data})
+            })
+        }
+        SpotifyWebApi.skipToNext();
+        this.getItemsPlaying();
+        this.setState({skipVote:0})
+        this.setState({songState:true})
+        
         }
         else{
             this.setState({skipVote:this.state.skipVote+1})
@@ -289,9 +289,9 @@ class Room extends Component {
                               Host:  <img src={this.state.user.profileImage} alt="host" className ="user-profile"/>
                               <br/>
                               You: {this.state.username}
-                              <br/>
-                        
+                              <br/>                        
                             <Guests 
+                                room_code ={this.state.roomCode}
                                 skipVote={this.state.skipVote} 
                                 guests={this.state.guests} 
                                 update={this.updateGuests.bind(this)}
