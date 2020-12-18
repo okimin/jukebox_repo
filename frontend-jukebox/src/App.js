@@ -120,7 +120,7 @@ class App extends Component {
   render(){ 
    return (
     <div className="App-bg">
-      <div className="login ">  
+      <div className="login">  
       <div className="column-logo">       
         <img src={logo} width="60px" className="logo-pic" alt="logo"/>
         <h2 className="title">JukeBerry</h2>        

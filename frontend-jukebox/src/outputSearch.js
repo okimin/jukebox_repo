@@ -19,9 +19,9 @@ class outputSearch extends Component {
     }
     addToQueue =(uri,name,artist,image)=>{
         
-        console.log(uri,name,artist,image);
-        console.log(this.props.room_code);
-        console.log(name.length)
+        // console.log(uri,name,artist,image);
+        // console.log(this.props.room_code);
+        // console.log(name.length)
         axios.post("https://jukeberry-api.herokuapp.com/api/song", 
         {
                 name:name,
@@ -31,7 +31,7 @@ class outputSearch extends Component {
                 room_code:this.props.room_code
         })
         .then(res=>{
-            console.log("success");
+            // console.log("success");
         })
         .catch(err=>{console.error(err);})
     }

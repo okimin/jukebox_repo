@@ -159,8 +159,9 @@ label{
   color: 	#6c2525;
 }
 .search-display{
-  width: 95%;
-  position: absolute;
+  margin: auto;
+  width: 90%;
+  position:absolute;
   z-index:10;
   background-color: #3f82f4;
   color: #090000;
@@ -168,7 +169,10 @@ label{
   padding: 10px;
   opacity:.8;
 }
-.search-list{text-align: left;}
+.search-list{
+  text-align: left;
+  
+}
 .search-text{
   margin: 0px;
 }
@@ -253,4 +257,31 @@ label{
     /* border: solid; */
   }
   .title{margin: auto;}
+  .search-display{
+    width: 70%;
+    z-index: 10px;
+  }
+
+  #search{
+    margin: 5px;
+    width: 90%
+  }
+  .App-bg{
+    /* background-color: seashell; */
+    /* border: solid; */
+    color: rebeccapurple;
+    padding: 0px;
+  }
+  .column-logo{
+    /* margin-top: 60px; */
+    /* border: solid; */
+  }
+  .login{
+
+    padding-top: 30px;
+    /* color: beige; */
+    height: 70%;
+    width: 70%;
+
+  }
 }

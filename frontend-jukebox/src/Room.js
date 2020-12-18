@@ -63,10 +63,10 @@ class Room extends Component {
         this.getRoom();
         this.getItemsPlaying();        
         this.makePlaylist();
-
+        this.getUser()
         setInterval(this.getRoom,2000);
-        setInterval(this.getItemsPlaying,2000);
-        setInterval(this.getUser,2000);
+        setInterval(this.getItemsPlaying,3500);
+        // setInterval(this.getUser,2000);
         setInterval(this.makePlaylist,2000)
 
     }
@@ -146,9 +146,7 @@ class Room extends Component {
             if(res.item.uri!==this.state.nowPlaying.playUri 
                 && this.state.nowPlaying.playUri!=="" && !this.state.next)
             {
-                // console.log("pausing");
-                // this.pauseSong()
-                // SpotifyWebApi.pause()
+
                 if (this.state.songs.length>0){
                     console.log("adding to queue");
                     SpotifyWebApi.queue(this.state.songs[0].song_id)
@@ -164,17 +162,12 @@ class Room extends Component {
                             
                         })
                 }
-                // console.log('playing the song');
-                // SpotifyWebApi.play()
-
-                SpotifyWebApi.skipToNext()
-                console.log("going to next song");
                 
-                
-                
-                // SpotifyWebApi.play();
-                console.log("reversing");
                 this.setState({next:true})
+                SpotifyWebApi.skipToNext()
+                // console.log("going to next song");
+                // console.log("reversing");
+               
             }
             else{
                 this.setState({next:false})
@@ -221,7 +214,7 @@ class Room extends Component {
         // console.log(this.state.guests)
         if(this._isMounted){
         if(this.state.skipVote > this.state.guests.length/2-1){
-            if (this.state.songs.length>0){
+            if (this.state.songs.length>0 &&!this.state.next){
                 SpotifyWebApi.queue(this.state.songs[0].song_id)
                 axios.delete('https://jukeberry-api.herokuapp.com/api/song',{
                 params:{
@@ -236,11 +229,12 @@ class Room extends Component {
                 )
             })
         }
-        SpotifyWebApi.skipToNext();
-        this.getItemsPlaying();
         this.setState({skipVote:0})
         this.setState({songState:true})
         this.setState({next:true})
+        SpotifyWebApi.skipToNext();
+        // this.getItemsPlaying();
+        
             console.log("set to true");
         }
 

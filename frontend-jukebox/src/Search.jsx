@@ -12,7 +12,7 @@ const SpotifyWebApi = new Spotify();
 
 // const params = login.getAccessToken()
 class Search extends Component {
-   
+    _isMounted=false
     constructor(props){
         // params = this.props
         super(props);
@@ -24,25 +24,35 @@ class Search extends Component {
         }
     }
     componentDidMount(){
+        this._isMounted= true;
+
         // axios.get("https://jukeberry-api.herokuapp.com/api/home")
         // .then(res => {
         //     params = res.data
         // })
         // .catch(err=>console.error(err))
     }
-    getSearch = event =>{
-        event.preventDefault();
-        SpotifyWebApi.searchTracks(this.state.searchInput)
-        .then(res => {            
-            this.setState({
-                searchArray: res.tracks.items
-            })
-        }).catch(e=>console.log(e))
+    componentWillUnmount(){
+        this._isMounted =false
     }
+    getSearch = event =>{
+        
+        event.preventDefault();
+        if(this._isMounted){
+            SpotifyWebApi.searchTracks(this.state.searchInput)
+            .then(res => {            
+                this.setState({
+                    searchArray: res.tracks.items
+                })
+            }).catch(e=>console.log(e))
+        }
+    }
+    
     getToken=()=>{
     }
     getSearchValue=(e)=>{
-        this.setState({searchInput: e.target.value })
+        if(this._isMounted)
+            this.setState({searchInput: e.target.value })
     }
     render() {
         return (
