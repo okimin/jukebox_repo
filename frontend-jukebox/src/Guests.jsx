@@ -38,7 +38,7 @@ class Guests extends Component {
 
     render() {
         return (
-            <div>
+            <div className="guests-lists">
                  Guests:
                 {this.state.guests.map((guest,index)=>(
                                 <div key={index}>{guest}</div> 

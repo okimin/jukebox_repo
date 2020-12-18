@@ -53,8 +53,8 @@ class Login extends Component {
                 {this.state.loggedIn && 
                     <h3>Logged in!</h3>
                 }
-                 <a href='https://juekbox-auth.herokuapp.com/login' >
-                    {/* <a href='http://localhost:8888/login' > */}
+                 {/* <a href='https://juekbox-auth.herokuapp.com/login' > */}
+                    <a href='http://localhost:8888/login' >
                  
                     <div style={{padding: "10px"}}>Login to Spotify </div>
                

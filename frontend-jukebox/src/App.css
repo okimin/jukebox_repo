@@ -193,3 +193,64 @@ label{
   justify-content: left;
   align-content: center;
   margin: auto;  }
+  
+@media screen and (max-width: 480px) {
+  .App-bg{
+    text-align: center;
+  }
+  .room-css{
+    text-align: center;
+  }
+  .title{
+    margin: auto;
+    margin-left: 5px ;
+    font-size: small;
+    padding: 0px;
+    /* border:solid; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .logo-pic{
+    width: 20%;
+    /* height: 10%; */
+    margin: auto;
+    /* border: solid; */
+    margin-right: 5px;
+  }
+  .room-logo{
+    margin: auto;
+  }
+  .room-header{
+    text-align: center;
+    /* border: solid; */
+    margin: auto;
+  }
+  .users-tab{
+    margin: auto;
+    text-align: center;
+  }
+  .user-profile{
+    width: 25px;
+  }
+  .column-logo{
+    width: 100%;
+    /* border: solid; */
+  }
+}
+
+@media screen and (max-width: 250px) {
+  .room-logo{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+    width: 60%;
+    /* border: solid; */
+  }
+  .logo-pic{
+    margin: auto;
+    /* border: solid; */
+  }
+  .title{margin: auto;}
+}

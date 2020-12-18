@@ -24,13 +24,11 @@ class outputSearch extends Component {
         console.log(name.length)
         axios.post("https://jukeberry-api.herokuapp.com/api/song", 
         {
-            
                 name:name,
                 song_id:uri,
                 song_pic:image,
                 artist_id:artist,
                 room_code:this.props.room_code
-            
         })
         .then(res=>{
             console.log("success");
