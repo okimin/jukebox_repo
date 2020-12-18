@@ -44,7 +44,8 @@ class Room extends Component {
             skipVote:0,
             guests:[],
             songs:[],
-            next:false
+            next:false,
+            host:false,
         }
 
         // this.getNowPlaying = this.getNowPlaying.bind(this);
@@ -101,20 +102,24 @@ class Room extends Component {
     //GETS ALL THE INFORMATION FROM THE ROOM USING THE ROOM CODE TO  
     getRoom = () => {
         // gets the token from the backend and connects spotify 
-        SpotifyWebApi.setAccessToken(this.state.token)
+        if(this._isMounted){
+            SpotifyWebApi.setAccessToken(this.state.token)
 
-        axios.get('https://jukeberry-api.herokuapp.com/api/viewroom',{
-            params:{
-                room_code:this.state.roomCode
+            axios.get('https://jukeberry-api.herokuapp.com/api/viewroom',{
+                params:{
+                    room_code:this.state.roomCode
+                }
+            })
+            .then(res=>{
+                if(this._isMounted){
+                    var roomInfo = res.data  
+                    this.setState({token:roomInfo.access_token})     
+                    if(roomInfo.host_name===this.state.username)    
+                        this.setState({host:true}) 
             }
-        })
-        .then(res=>{
-            if(this._isMounted){
-                var roomInfo = res.data  
-                this.setState({token:roomInfo.access_token})       
+            })
+            .catch(err=>console.error(err))
         }
-        })
-        .catch(err=>console.error(err))
     }
     loadSpotify=()=>{
         SpotifyWebApi.setAccessToken(this.state.token)
@@ -248,13 +253,19 @@ class Room extends Component {
         this.getItemsPlaying()
     }
     pauseSong = () => {
-        if(this.state.songState){
-            SpotifyWebApi.pause()
-            this.setState({songState:!this.state.songState})
+
+        if(this.state.host){
+            if(this.state.songState){
+                SpotifyWebApi.pause()
+                this.setState({songState:!this.state.songState})
+            }
+            else {
+                SpotifyWebApi.play()
+                this.setState({songState:!this.state.songState})
+            }
         }
-        else {
-            SpotifyWebApi.play()
-            this.setState({songState:!this.state.songState})
+        else{
+            window.alert("you are not the host you cannot control this")
         }
     }
     getUser =() => {

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Spotify from "spotify-web-api-js";
+// import Spotify from "spotify-web-api-js";
 import axios from "axios"
 
-const SpotifyWebApi = new Spotify();
+// const SpotifyWebApi = new Spotify();
 
 class outputSearch extends Component {
     constructor(props){
